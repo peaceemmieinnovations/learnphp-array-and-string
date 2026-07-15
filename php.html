@@ -1,0 +1,2507 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PHP Mastery — Modules 7 & 8</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet">
+  <style>
+    /* ===== YOUR ORIGINAL CSS (EXACTLY AS YOU HAD IT) ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #09090f;
+      --surface: #101018;
+      --surface2: #181828;
+      --surface3: #21213a;
+      --border: #2a2a45;
+      --accent: #ff6b35;
+      --accent2: #00c9b1;
+      --accent3: #ffd166;
+      --m7: #ff6b35;
+      --m8: #00c9b1;
+      --oop: #a78bfa;
+      --quiz: #ffd166;
+      --text: #dde1f0;
+      --muted: #666880;
+      --code-bg: #0c0c1a;
+      --green: #4cc97a;
+      --red: #ff5757;
+      --blue: #79c0ff;
+      --purple: #a78bfa;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Barlow', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .prog-bar {
+      height: 3px;
+      background: var(--border);
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .prog-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transition: width .4s ease;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .hdr {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 24px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-box {
+      width: 30px;
+      height: 30px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .logo-name {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 17px;
+      letter-spacing: 1px;
+    }
+
+    .hdr-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge {
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .badge-m7 {
+      background: rgba(255, 107, 53, .12);
+      color: var(--m7);
+      border: 1px solid rgba(255, 107, 53, .25);
+    }
+
+    .badge-m8 {
+      background: rgba(0, 201, 177, .12);
+      color: var(--m8);
+      border: 1px solid rgba(0, 201, 177, .25);
+    }
+
+    .badge-oop {
+      background: rgba(167, 139, 250, .12);
+      color: var(--oop);
+      border: 1px solid rgba(167, 139, 250, .25);
+    }
+
+    .slide-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      background: var(--surface2);
+      padding: 3px 10px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+    }
+
+    .viewport {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    .slide {
+      display: none;
+      animation: fadeUp .35s ease;
+    }
+
+    .slide.active {
+      display: block;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 24px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 18px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      color: var(--text);
+      cursor: pointer;
+      font-family: 'Barlow', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all .2s;
+    }
+
+    .nav-btn:hover:not(:disabled) {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--surface3);
+    }
+
+    .nav-btn:disabled {
+      opacity: .3;
+      cursor: not-allowed;
+    }
+
+    .nav-btn.primary {
+      background: linear-gradient(135deg, var(--accent), #ff8c5a);
+      border-color: transparent;
+      color: #fff;
+    }
+
+    .nav-btn.primary:hover:not(:disabled) {
+      opacity: .88;
+      color: #fff;
+    }
+
+    .dots {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      flex-wrap: wrap;
+      max-width: 400px;
+      justify-content: center;
+    }
+
+    .dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--border);
+      cursor: pointer;
+      transition: all .2s;
+      border: none;
+    }
+
+    .dot.active {
+      background: var(--accent);
+      transform: scale(1.5);
+    }
+
+    .dot.visited {
+      background: var(--muted);
+    }
+
+    .cover {
+      min-height: calc(100vh - 110px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      text-align: center;
+      background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(255, 107, 53, .07) 0%, transparent 100%), radial-gradient(ellipse 40% 30% at 80% 80%, rgba(0, 201, 177, .05) 0%, transparent 100%);
+    }
+
+    .cover-tag {
+      display: inline-block;
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: rgba(255, 107, 53, .1);
+      color: var(--accent);
+      border: 1px solid rgba(255, 107, 53, .2);
+      margin-bottom: 20px;
+    }
+
+    .cover-title {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(52px, 8vw, 90px);
+      letter-spacing: 4px;
+      line-height: .95;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #fff 40%, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .cover-sub {
+      font-size: 17px;
+      font-weight: 300;
+      color: var(--muted);
+      margin-bottom: 36px;
+    }
+
+    .cover-cards {
+      display: flex;
+      gap: 18px;
+      margin-bottom: 36px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .cover-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 24px;
+      text-align: left;
+      min-width: 190px;
+    }
+
+    .cover-card.m7 {
+      border-top: 3px solid var(--m7);
+    }
+
+    .cover-card.m8 {
+      border-top: 3px solid var(--m8);
+    }
+
+    .cc-mod {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 5px;
+    }
+
+    .m7 .cc-mod {
+      color: var(--m7);
+    }
+
+    .m8 .cc-mod {
+      color: var(--m8);
+    }
+
+    .cc-name {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 20px;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .cc-topics {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.9;
+    }
+
+    .cover-stats {
+      display: flex;
+      gap: 28px;
+    }
+
+    .cs {
+      text-align: center;
+    }
+
+    .cs-n {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 36px;
+      color: var(--accent);
+    }
+
+    .cs-l {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .content {
+      padding: 28px 36px;
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    .sh {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 22px;
+    }
+
+    .st {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 38px;
+      letter-spacing: 2px;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .st span {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .sd {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 300;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .three-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .cc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+    }
+
+    .cc h3 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--accent2);
+      margin-bottom: 8px;
+    }
+
+    .syn {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 7px;
+      padding: 12px 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      color: var(--blue);
+      margin: 10px 0;
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    .info {
+      background: rgba(0, 201, 177, .05);
+      border: 1px solid rgba(0, 201, 177, .2);
+      border-radius: 9px;
+      padding: 12px 16px;
+      margin: 10px 0;
+      font-size: 13px;
+    }
+
+    .warn {
+      background: rgba(255, 209, 102, .05);
+      border: 1px solid rgba(255, 209, 102, .2);
+      border-radius: 9px;
+      padding: 12px 16px;
+      margin: 10px 0;
+      font-size: 13px;
+    }
+
+    .fsig {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      margin: 10px 0;
+    }
+
+    .fname {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--accent3);
+      margin-bottom: 4px;
+    }
+
+    .fsignature {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--blue);
+      margin-bottom: 7px;
+    }
+
+    .fdesc {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .fparams {
+      margin-top: 10px;
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    .fparams th {
+      text-align: left;
+      padding: 4px 8px;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 10px;
+    }
+
+    .fparams td {
+      padding: 4px 8px;
+      border-bottom: 1px solid rgba(42, 42, 69, .4);
+    }
+
+    .pn {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--purple);
+    }
+
+    .pt {
+      color: var(--blue);
+    }
+
+    .pd {
+      color: var(--muted);
+    }
+
+    .lab {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .editor-panel {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .ep-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .ep-file {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .ep-file::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .ep-btns {
+      display: flex;
+      gap: 7px;
+    }
+
+    .btn-run {
+      padding: 4px 13px;
+      background: var(--green);
+      color: #000;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-family: 'Barlow', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      transition: all .2s;
+    }
+
+    .btn-run:hover {
+      opacity: .82;
+      transform: translateY(-1px);
+    }
+
+    .btn-next {
+      padding: 4px 11px;
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      cursor: pointer;
+      font-family: 'Barlow', sans-serif;
+      font-size: 11px;
+      transition: all .2s;
+    }
+
+    .btn-next:hover {
+      border-color: var(--accent2);
+      color: var(--accent2);
+    }
+
+    .ex-title {
+      padding: 4px 12px;
+      background: rgba(255, 107, 53, .04);
+      border-bottom: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--accent);
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .code-ta {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #c9d1d9;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      line-height: 1.75;
+      padding: 12px;
+      resize: none;
+      min-height: 230px;
+    }
+
+    .op {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .op-top {
+      display: flex;
+      align-items: center;
+      padding: 8px 12px;
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .op-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .op-label::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--border);
+      transition: background .3s;
+    }
+
+    .op-label.running::before {
+      background: var(--accent3);
+      animation: blink 1s infinite;
+    }
+
+    .op-label.success::before {
+      background: var(--green);
+    }
+
+    .op-label.err::before {
+      background: var(--red);
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: .2;
+      }
+    }
+
+    .op-content {
+      flex: 1;
+      padding: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      line-height: 1.75;
+      color: var(--green);
+      white-space: pre-wrap;
+      overflow-y: auto;
+      min-height: 230px;
+      max-height: 320px;
+    }
+
+    .op-content.wait {
+      color: var(--muted);
+    }
+
+    .op-content.err {
+      color: var(--red);
+    }
+
+    .ov-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin: 18px 0;
+    }
+
+    .ov-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      transition: all .2s;
+      cursor: default;
+    }
+
+    .ov-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .ov-icon {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .ov-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .ov-desc {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    ul.slist {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul.slist li {
+      padding: 5px 0 5px 18px;
+      position: relative;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    ul.slist li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+
+    .ci {
+      background: var(--surface2);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .88em;
+      color: var(--blue);
+    }
+
+    hr.div {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 16px 0;
+    }
+
+    .quiz-wrap {
+      max-width: 660px;
+      margin: 0 auto;
+      padding: 28px 24px;
+    }
+
+    .quiz-hdr {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .quiz-ttl {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 46px;
+      letter-spacing: 3px;
+      margin-bottom: 6px;
+    }
+
+    .q-prog-txt {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .q-prog-bar {
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      margin: 10px 0 22px;
+    }
+
+    .q-prog-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent3), var(--accent));
+      border-radius: 2px;
+      transition: width .3s;
+    }
+
+    .q-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      margin-bottom: 18px;
+    }
+
+    .q-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .q-text {
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .q-code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 11px;
+      margin-bottom: 14px;
+      white-space: pre;
+    }
+
+    .opts {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .opt {
+      width: 100%;
+      padding: 11px 14px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      color: var(--text);
+      cursor: pointer;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+
+    .opt-l {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--surface3);
+      border: 1px solid var(--border);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .opt.correct {
+      background: rgba(76, 201, 122, .1);
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    .opt.wrong {
+      background: rgba(255, 87, 87, .1);
+      border-color: var(--red);
+      color: var(--red);
+    }
+
+    .fb {
+      padding: 11px 14px;
+      border-radius: 9px;
+      margin-top: 12px;
+      display: none;
+    }
+
+    .fb.ok {
+      background: rgba(76, 201, 122, .08);
+      border: 1px solid rgba(76, 201, 122, .25);
+      color: var(--green);
+      display: block;
+    }
+
+    .fb.fail {
+      background: rgba(255, 87, 87, .08);
+      border: 1px solid rgba(255, 87, 87, .25);
+      color: var(--red);
+      display: block;
+    }
+
+    .q-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 14px;
+    }
+
+    .q-score {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--accent3);
+    }
+
+    .results {
+      display: none;
+      text-align: center;
+      padding: 36px 24px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .res-emoji {
+      font-size: 64px;
+      margin-bottom: 20px;
+    }
+
+    .res-score {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 90px;
+      line-height: 1;
+      margin: 12px 0;
+    }
+
+    .res-label {
+      font-size: 17px;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+
+    .res-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .res-stat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+    }
+
+    .rs-n {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 34px;
+    }
+
+    .rs-l {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .complete {
+      min-height: calc(100vh - 110px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      text-align: center;
+      background: radial-gradient(ellipse 50% 35% at 50% 0%, rgba(0, 201, 177, .07) 0%, transparent 100%);
+    }
+
+    .comp-emoji {
+      font-size: 64px;
+      margin-bottom: 20px;
+    }
+
+    .comp-title {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 68px;
+      letter-spacing: 4px;
+      background: linear-gradient(135deg, var(--accent2), var(--accent3));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .comp-sub {
+      font-size: 17px;
+      color: var(--muted);
+      margin-bottom: 32px;
+    }
+
+    .comp-pills {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 28px;
+    }
+
+    .pill {
+      padding: 5px 13px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      background: rgba(76, 201, 122, .1);
+      border: 1px solid rgba(76, 201, 122, .25);
+      color: var(--green);
+    }
+
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--surface);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 3px;
+    }
+
+    .oop-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 2px 9px;
+      background: rgba(167, 139, 250, .1);
+      border: 1px solid rgba(167, 139, 250, .25);
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--oop);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 7px;
+    }
+
+    /* added explanation box */
+    .explanation {
+      background: rgba(167, 139, 250, 0.08);
+      border-left: 4px solid var(--purple);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-top: 14px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .explanation strong {
+      color: var(--accent3);
+    }
+
+    .ref-table {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin: 16px 0;
+      overflow-x: auto;
+    }
+
+    .ref-table table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .ref-table th {
+      background: var(--surface2);
+      padding: 10px 12px;
+      text-align: left;
+      color: var(--accent2);
+      border-bottom: 1px solid var(--border);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 11px;
+    }
+
+    .ref-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(42, 42, 69, .3);
+      color: var(--text);
+    }
+
+    .ref-table tr:hover {
+      background: rgba(167, 139, 250, .05);
+    }
+
+    .ref-func {
+      color: var(--accent3);
+      font-weight: 600;
+    }
+
+    .ref-desc {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    @media(max-width:768px) {
+      .content {
+        padding: 18px 16px;
+      }
+
+      .lab {
+        grid-template-columns: 1fr;
+      }
+
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+
+      .three-col {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="prog-bar">
+    <div class="prog-fill" id="gProg" style="width:5.5%"></div>
+  </div>
+  <div class="hdr"><!-- unchanged --></div>
+  <div class="viewport" id="vp">
+    <div class="hdr">
+      <div class="logo">
+        <div class="logo-box">PHP</div><span class="logo-name">PHP Mastery Course</span>
+      </div>
+      <div class="hdr-right"><span class="badge badge-m7" id="hdrBadge">MODULE 7</span><span class="slide-num"
+          id="slideNum">1 / 18</span></div>
+    </div>
+    <div class="viewport" id="vp">
+
+      <!-- SLIDE 1: COVER (exactly as original) -->
+      <div class="slide active" id="s1">
+        <div class="cover">
+          <div class="cover-tag">PHP Mastery · Interactive Course</div>
+          <div class="cover-title">ARRAYS &<br>STRINGS</div>
+          <div class="cover-sub">Modules 7 &amp; 8 · Live Code Execution · OOP · Quiz</div>
+          <div class="cover-cards">
+            <div class="cover-card m7">
+              <div class="cc-mod">Module 7</div>
+              <div class="cc-name">PHP Arrays</div>
+              <div class="cc-topics">▸ Indexed Arrays<br>▸ Associative Arrays<br>▸ Multidimensional Arrays<br>▸ Common
+                Array Functions<br>▸ OOP with Arrays</div>
+            </div>
+            <div class="cover-card m8">
+              <div class="cc-mod">Module 8</div>
+              <div class="cc-name">String Functions</div>
+              <div class="cc-topics">▸ strlen()<br>▸ strpos() / stripos()<br>▸ substr()<br>▸ str_replace()<br>▸
+                explode()
+                / implode()</div>
+            </div>
+          </div>
+          <div class="cover-stats">
+            <div class="cs">
+              <div class="cs-n">18</div>
+              <div class="cs-l">Slides</div>
+            </div>
+            <div class="cs">
+              <div class="cs-n">100+</div>
+              <div class="cs-l">Code Examples</div>
+            </div>
+            <div class="cs">
+              <div class="cs-n">23</div>
+              <div class="cs-l">Quiz Questions</div>
+            </div>
+            <div class="cs">
+              <div class="cs-n">5+</div>
+              <div class="cs-l">OOP Examples</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 2: MODULE 7 OVERVIEW (simplified but complete) -->
+      <div class="slide" id="s2">
+        <div class="content">
+          <div class="sh">
+            <div>
+              <div class="st">MODULE 7 — <span>ARRAYS</span></div>
+              <div class="sd">Collections of data — the backbone of PHP applications</div>
+            </div><span class="badge badge-m7">MODULE 7</span>
+          </div>
+          <div class="info"><strong>What is an Array?</strong> An array is a special variable that holds multiple values
+            under one name.</div>
+          <div class="ov-grid">
+            <div class="ov-card">
+              <div class="ov-icon">📋</div>
+              <div class="ov-title">Indexed Arrays</div>
+              <div class="ov-desc">Numeric indexes starting at 0.</div>
+            </div>
+            <div class="ov-card">
+              <div class="ov-icon">🗂️</div>
+              <div class="ov-title">Associative Arrays</div>
+              <div class="ov-desc">Named string keys.</div>
+            </div>
+            <div class="ov-card">
+              <div class="ov-icon">🏗️</div>
+              <div class="ov-title">Multidimensional</div>
+              <div class="ov-desc">Arrays within arrays.</div>
+            </div>
+            <div class="ov-card">
+              <div class="ov-icon">🔧</div>
+              <div class="ov-title">Array Functions</div>
+              <div class="ov-desc">sort, search, merge, filter…</div>
+            </div>
+            <div class="ov-card">
+              <div class="ov-icon">🎯</div>
+              <div class="ov-title">OOP + Arrays</div>
+              <div class="ov-desc">Using arrays in classes.</div>
+            </div>
+          </div>
+          <hr class="div">
+          <div class="two-col">
+            <div class="cc">
+              <h3>Creating Arrays — 3 Ways</h3>
+              <div class="syn">$arr = [1,2,3];<br>$arr = array(1,2,3);<br>$arr = []; $arr[] = "first";</div>
+            </div>
+            <div class="cc">
+              <h3>Key Facts</h3>
+              <ul class="slist">
+                <li>Hold any data type</li>
+                <li>Indexed start at 0</li>
+                <li>Dynamic size</li>
+                <li>Use print_r() to debug</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 3: INDEXED ARRAYS (with explanation div) -->
+      <div class="slide" id="s3">
+        <div class="content">
+          <div class="sh">
+            <div>
+              <div class="st"><span>INDEXED</span> ARRAYS</div>
+              <div class="sd">Ordered lists with numeric keys starting at 0</div>
+            </div><span class="badge badge-m7">MODULE 7</span>
+          </div>
+          <div class="two-col">
+            <div>
+              <div class="cc">
+                <h3>Syntax</h3>
+                <div class="syn">$fruits = ["Apple","Banana","Cherry"];<br>echo $fruits[0]; // Apple<br>$fruits[] =
+                  "Date"; // Append</div>
+              </div>
+            </div>
+            <div>
+              <div class="cc">
+                <h3>Common Operations</h3>
+                <ul class="slist">
+                  <li>count($arr)</li>
+                  <li>$arr[] = val</li>
+                  <li>sort($arr)</li>
+                  <li>in_array(val, $arr)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="lab">
+            <div class="editor-panel">
+              <div class="ep-top">
+                <div class="ep-file">indexed_arrays.php</div>
+                <div class="ep-btns"><button class="btn-run"
+                    onclick="runCode('ta-indexed','out-indexed','ol-indexed')">▶
+                    Run</button><button class="btn-next"
+                    onclick="nextEx('indexed',['ta-indexed'],['out-indexed','ol-indexed'])">🔄 Next Example</button>
+                </div>
+              </div>
+              <div class="ex-title" id="et-indexed">Example 1: Student Grades Management</div><textarea class="code-ta"
+                id="ta-indexed" spellcheck="false"></textarea>
+            </div>
+            <div class="op">
+              <div class="op-top">
+                <div class="op-label" id="ol-indexed">Output</div>
+              </div>
+              <div class="op-content wait" id="out-indexed">▶ Click "Run" to execute PHP...</div>
+            </div>
+          </div>
+          <div class="explanation" id="exp-indexed"></div>
+        </div>
+      </div>
+
+      <!-- SLIDE 4: ASSOCIATIVE ARRAYS -->
+      <div class="slide" id="s4">
+        <div class="content">
+          <div class="sh">
+            <div>
+              <div class="st"><span>ASSOCIATIVE</span> ARRAYS</div>
+              <div class="sd">Key-value pairs — like a dictionary</div>
+            </div><span class="badge badge-m7">MODULE 7</span>
+          </div>
+          <div class="two-col">
+            <div>
+              <div class="cc">
+                <h3>Syntax</h3>
+                <div class="syn">$student = ["name"=>"Alice","age"=>20];<br>echo $student["name"];</div>
+              </div>
+            </div>
+            <div>
+              <div class="cc">
+                <h3>Key Functions</h3>
+                <ul class="slist">
+                  <li>array_keys($arr)</li>
+                  <li>array_values($arr)</li>
+                  <li>ksort($arr)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="lab">
+            <div class="editor-panel">
+              <div class="ep-top">
+                <div class="ep-file">associative_arrays.php</div>
+                <div class="ep-btns"><button class="btn-run" onclick="runCode('ta-assoc','out-assoc','ol-assoc')">▶
+                    Run</button><button class="btn-next"
+                    onclick="nextEx('assoc',['ta-assoc'],['out-assoc','ol-assoc'])">🔄 Next Example</button></div>
+              </div>
+              <div class="ex-title" id="et-assoc">Example 1: Student Profile</div><textarea class="code-ta"
+                id="ta-assoc" spellcheck="false"></textarea>
+            </div>
+            <div class="op">
+              <div class="op-top">
+                <div class="op-label" id="ol-assoc">Output</div>
+              </div>
+              <div class="op-content wait" id="out-assoc">▶ Click "Run" to execute PHP...</div>
+            </div>
+          </div>
+          <div class="explanation" id="exp-assoc"></div>
+        </div>
+      </div>
+
+      <!-- SLIDE 5: MULTIDIMENSIONAL -->
+      <div class="slide" id="s5">
+        <div class="content">
+          <div class="sh">
+            <div>
+              <div class="st"><span>MULTIDIMENSIONAL</span> ARRAYS</div>
+              <div class="sd">Arrays inside arrays — tables, grids</div>
+            </div><span class="badge badge-m7">MODULE 7</span>
+          </div>
+          <div class="two-col">
+            <div>
+              <div class="cc">
+                <h3>2D Array</h3>
+                <div class="syn">$classroom = [["Alice",92],["Bob",78]];<br>echo $classroom[0][0]; // Alice</div>
+              </div>
+            </div>
+            <div>
+              <div class="cc">
+                <h3>array_column()</h3>
+                <div class="syn">$grades = array_column($classroom,1);</div>
+              </div>
+            </div>
+          </div>
+          <div class="lab">
+            <div class="editor-panel">
+              <div class="ep-top">
+                <div class="ep-file">multidimensional.php</div>
+                <div class="ep-btns"><button class="btn-run" onclick="runCode('ta-multi','out-multi','ol-multi')">▶
+                    Run</button><button class="btn-next"
+                    onclick="nextEx('multi',['ta-multi'],['out-multi','ol-multi'])">🔄 Next Example</button></div>
+              </div>
+              <div class="ex-title" id="et-multi">Example 1: Class Roster with Grades</div><textarea class="code-ta"
+                id="ta-multi" spellcheck="false"></textarea>
+            </div>
+            <div class="op">
+              <div class="op-top">
+                <div class="op-label" id="ol-multi">Output</div>
+              </div>
+              <div class="op-content wait" id="out-multi">▶ Click "Run" to execute PHP...</div>
+            </div>
+          </div>
+          <div class="explanation" id="exp-multi"></div>
+        </div>
+      </div>
+
+      <!-- SLIDE 6: ARRAY FUNCTIONS PART 1 -->
+      <div class="slide" id="s6">
+        <div class="content">
+          <div class="sh">
+            <div>
+              <div class="st">ARRAY <span>FUNCTIONS</span> — PART 1</div>
+              <div class="sd">Adding, removing, sorting, counting</div>
+            </div><span class="badge badge-m7">MODULE 7</span>
+          </div>
+          <div class="three-col">
+            <div class="cc">
+              <h3>Add / Remove</h3>
+              <ul>
+                <li>array_push()</li>
+                <li>array_pop()</li>
+                <li>array_shift()</li>
+              </ul>
+            </div>
+            <div class="cc">
+              <h3>Sorting</h3>
+              <ul>
+                <li>sort() / rsort()</li>
+                <li>asort() / ksort()</li>
+              </ul>
+            </div>
+            <div class="cc">
+              <h3>Info</h3>
+              <ul>
+                <li>count()</li>
+                <li>max() / min()</li>
+                <li>array_sum()</li>
+              </ul>
+            </div>
+          </div>
+          <div class="lab">
+            <div class="editor-panel">
+              <div class="ep-top">
+                <div class="ep-file">array_functions_1.php</div>
+                <div class="ep-btns"><button class="btn-run" onclick="runCode('ta-af1','out-af1','ol-af1')">▶
+                    Run</button><button class="btn-next" onclick="nextEx('af1',['ta-af1'],['out-af1','ol-af1'])">🔄 Next
+                    Example</button></div>
+              </div>
+              <div class="ex-title" id="et-af1">Example 1: Stack & Queue Operations</div><textarea class="code-ta"
+                id="ta-af1" spellcheck="false"></textarea>
+            </div>
+            <div class="op">
+              <div class="op-top">
+                <div class="op-label" id="ol-af1">Output</div>
+              </div>
+              <div class="op-content wait" id="out-af1">▶ Click "Run" to execute PHP...</div>
+            </div>
+          </div>
+          <div class="explanation" id="exp-af1"></div>
+        </div>
+      </div>
+
+      <!-- SLIDE 7: ARRAY FUNCTIONS PART 2 -->
+      <div class="slide" id="s7">
+        <div class="content">
+          <div class="sh">
+            <div>
+              <div class="st">ARRAY <span>FUNCTIONS</span> — PART 2</div>
+              <div class="sd">Search, filter, map, reduce</div>
+            </div><span class="badge badge-m7">MODULE 7</span>
+          </div>
+          <div class="three-col">
+            <div class="cc">
+              <h3>Search</h3>
+              <ul>
+                <li>in_array()</li>
+                <li>array_search()</li>
+              </ul>
+            </div>
+            <div class="cc">
+              <h3>Transform</h3>
+              <ul>
+                <li>array_map()</li>
+                <li>array_filter()</li>
+                <li>array_reduce()</li>
+              </ul>
+            </div>
+            <div class="cc">
+              <h3>Merge & Slice</h3>
+              <ul>
+                <li>array_merge()</li>
+                <li>array_slice()</li>
+              </ul>
+            </div>
+          </div>
+          <div class="lab">
+            <div class="editor-panel">
+              <div class="ep-top">
+                <div class="ep-file">array_functions_2.php</div>
+                <div class="ep-btns"><button class="btn-run" onclick="runCode('ta-af2','out-af2','ol-af2')">▶
+                    Run</button><button class="btn-next" onclick="nextEx('af2',['ta-af2'],['out-af2','ol-af2'])">🔄 Next
+                    Example</button></div>
+              </div>
+              <div class="ex-title" id="et-af2">Example 1: Search, Filter & Transform</div><textarea class="code-ta"
+                id="ta-af2" spellcheck="false"></textarea>
+            </div>
+            <div class="op">
+              <div class="op-top">
+                <div class="op-label" id="ol-af2">Output</div>
+              </div>
+              <div class="op-content wait" id="out-af2">▶ Click "Run" to execute PHP...</div>
+            </div>
+          </div>
+          <div class="explanation" id="exp-af2"></div>
+          <div class="ref-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Function</th>
+                  <th>Description</th>
+                  <th>Example</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="ref-func">count()</td>
+                  <td>Get array size</td>
+                  <td>count([1,2,3]) = 3</td>
+                </tr>
+                <tr>
+                  <td class="ref-func">array_push()</td>
+                  <td>Add to end</td>
+                  <td>array_push($arr, $val)</td>
+                </tr>
+                <tr>
+                  <td class="ref-func">array_pop()</td>
+                  <td>Remove from end</td>
+                  <td>$last = array_pop($arr)</td>
+                </tr>
+                <tr>
+                  <td class="ref-func">array_shift()</td>
+                  <td>Remove from start</td>
+                  <td>$first = array_shift($arr)</td>
+                </tr>
+                <tr>
+                  <td class="ref-func">array_unshift()</td>
+                  <td>Add to start</td>
+                  <td>array_unshift($arr, $val)</td>
+                </tr>
+                <tr>
+                  <td class="ref-func">sort()</td>
+                  <td>Sort ascending</td>
+                  <td>sort($arr)</td>
+                </tr>
+                <tr>
+                  <td class="ref-func">rsort()</td>
+                  <td>Sort descending</td>
+                  <td>rsort($arr)</td>
+                </tr>
+                <tr>
+                  <td class="ref-func">array_filter()</td>
+                  <td>Keep matching</td>
+                  <td>array_filter($arr, callback)</td>
+                </tr>
+                <tr>
+                  <td class="ref-func">array_map()</td>
+                  <td>Transform each</td>
+                  <td>array_map(callback, $arr)</td>
+                </tr>
+                <tr>
+                  <td class="ref-func">array_merge()</td>
+                  <td>Combine arrays</td>
+                  <td>array_merge($arr1, $arr2)</td>
+                </tr>
+                <tr>
+                  <td class="ref-func">array_slice()</td>
+                  <td>Extract portion</td>
+                  <td>array_slice($arr, $start, $len)</td>
+                </tr>
+                <tr>
+                  <td class="ref-func">array_search()</td>
+                  <td>Find value</td>
+                  <td>$key = array_search($val, $arr)</td>
+                </tr>
+                <tr>
+                  <td class="ref-func">in_array()</td>
+                  <td>Check if exists</td>
+                  <td>in_array($val, $arr)</td>
+                </tr>
+                <tr>
+                  <td class="ref-func">array_column()</td>
+                  <td>Extract column</td>
+                  <td>array_column($data, 'id')</td>
+                </tr>
+                <tr>
+                  <td class="ref-func">array_unique()</td>
+                  <td>Remove duplicates</td>
+                  <td>array_unique($arr)</td>
+                </tr>
+                <tr>
+                  <td class="ref-func">array_reverse()</td>
+                  <td>Flip order</td>
+                  <td>array_reverse($arr)</td>
+                </tr>
+                <tr>
+                  <td class="ref-func">array_keys()</td>
+                  <td>Get all keys</td>
+                  <td>array_keys($arr)</td>
+                </tr>
+                <tr>
+                  <td class="ref-func">array_values()</td>
+                  <td>Get all values</td>
+                  <td>array_values($arr)</td>
+                </tr>
+                <tr>
+                  <td class="ref-func">array_sum()</td>
+                  <td>Sum elements</td>
+                  <td>array_sum([1,2,3]) = 6</td>
+                </tr>
+                <tr>
+                  <td class="ref-func">max()/min()</td>
+                  <td>Get extreme value</td>
+                  <td>max($arr), min($arr)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- SLIDE 8: OOP WITH ARRAYS -->
+          <div class="slide" id="s8">
+            <div class="content">
+              <div class="sh">
+                <div>
+                  <div class="oop-badge">⚙️ OOP</div>
+                  <div class="st">ARRAYS IN <span>CLASSES</span></div>
+                  <div class="sd">Object-Oriented Programming with arrays</div>
+                </div><span class="badge badge-oop">OOP</span>
+              </div>
+              <div class="two-col">
+                <div class="cc">
+                  <h3>Benefits</h3>
+                  <ul>
+                    <li>Encapsulation</li>
+                    <li>Validation</li>
+                    <li>Fluent interface</li>
+                  </ul>
+                </div>
+                <div class="cc">
+                  <h3>Example</h3>
+                  <div class="syn">class Cart { private array $items = []; }</div>
+                </div>
+              </div>
+              <div class="lab">
+                <div class="editor-panel">
+                  <div class="ep-top">
+                    <div class="ep-file">ShoppingCart.php</div>
+                    <div class="ep-btns"><button class="btn-run" onclick="runCode('ta-oop1','out-oop1','ol-oop1')">▶
+                        Run</button><button class="btn-next"
+                        onclick="nextEx('oop1',['ta-oop1'],['out-oop1','ol-oop1'])">🔄
+                        Next Example</button></div>
+                  </div>
+                  <div class="ex-title" id="et-oop1">Example 1: ShoppingCart OOP Class</div><textarea class="code-ta"
+                    id="ta-oop1" spellcheck="false" style="min-height:280px"></textarea>
+                </div>
+                <div class="op">
+                  <div class="op-top">
+                    <div class="op-label" id="ol-oop1">Output</div>
+                  </div>
+                  <div class="op-content wait" id="out-oop1">▶ Click "Run" to execute PHP...</div>
+                </div>
+              </div>
+              <div class="explanation" id="exp-oop1"></div>
+            </div>
+          </div>
+
+          <!-- SLIDE 9: MODULE 8 OVERVIEW -->
+          <div class="slide" id="s9">
+            <div class="content">
+              <div class="sh">
+                <div>
+                  <div class="st">MODULE 8 — <span>STRING FUNCTIONS</span></div>
+                  <div class="sd">Manipulate text with built-in functions</div>
+                </div><span class="badge badge-m8">MODULE 8</span>
+              </div>
+              <div class="info"><strong>What are String Functions?</strong> PHP has 100+ built-in string functions.
+                Module
+                8
+                covers the 6 most essential ones.</div>
+              <div class="ov-grid">
+                <div class="ov-card">
+                  <div class="ov-icon">📏</div>
+                  <div class="ov-title">strlen()</div>
+                  <div class="ov-desc">Get string length</div>
+                </div>
+                <div class="ov-card">
+                  <div class="ov-icon">🔍</div>
+                  <div class="ov-title">strpos()</div>
+                  <div class="ov-desc">Find substring position</div>
+                </div>
+                <div class="ov-card">
+                  <div class="ov-icon">✂️</div>
+                  <div class="ov-title">substr()</div>
+                  <div class="ov-desc">Extract portion</div>
+                </div>
+                <div class="ov-card">
+                  <div class="ov-icon">🔄</div>
+                  <div class="ov-title">str_replace()</div>
+                  <div class="ov-desc">Replace text</div>
+                </div>
+                <div class="ov-card">
+                  <div class="ov-icon">💥</div>
+                  <div class="ov-title">explode()</div>
+                  <div class="ov-desc">String to array</div>
+                </div>
+                <div class="ov-card">
+                  <div class="ov-icon">🔗</div>
+                  <div class="ov-title">implode()</div>
+                  <div class="ov-desc">Array to string</div>
+                </div>
+              </div>
+              <div class="ref-table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Function</th>
+                      <th>Description</th>
+                      <th>Example</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="ref-func">strlen()</td>
+                      <td>Get string length</td>
+                      <td>strlen("hello") = 5</td>
+                    </tr>
+                    <tr>
+                      <td class="ref-func">strtoupper()</td>
+                      <td>Convert to uppercase</td>
+                      <td>strtoupper("hello") = "HELLO"</td>
+                    </tr>
+                    <tr>
+                      <td class="ref-func">strtolower()</td>
+                      <td>Convert to lowercase</td>
+                      <td>strtolower("HELLO") = "hello"</td>
+                    </tr>
+                    <tr>
+                      <td class="ref-func">ucfirst()</td>
+                      <td>Capitalize first letter</td>
+                      <td>ucfirst("hello") = "Hello"</td>
+                    </tr>
+                    <tr>
+                      <td class="ref-func">ucwords()</td>
+                      <td>Capitalize each word</td>
+                      <td>ucwords("hello world") = "Hello World"</td>
+                    </tr>
+                    <tr>
+                      <td class="ref-func">str_replace()</td>
+                      <td>Replace text (all)</td>
+                      <td>str_replace("a", "b", "apple") = "bpple"</td>
+                    </tr>
+                    <tr>
+                      <td class="ref-func">str_ireplace()</td>
+                      <td>Replace (case-insensitive)</td>
+                      <td>str_ireplace("HELLO", "hi", "Hello")</td>
+                    </tr>
+                    <tr>
+                      <td class="ref-func">substr()</td>
+                      <td>Get substring</td>
+                      <td>substr("hello", 0, 2) = "he"</td>
+                    </tr>
+                    <tr>
+                      <td class="ref-func">strpos()</td>
+                      <td>Find first position</td>
+                      <td>strpos("hello", "l") = 2</td>
+                    </tr>
+                    <tr>
+                      <td class="ref-func">strrpos()</td>
+                      <td>Find last position</td>
+                      <td>strrpos("hello", "l") = 3</td>
+                    </tr>
+                    <tr>
+                      <td class="ref-func">trim()</td>
+                      <td>Remove whitespace</td>
+                      <td>trim(" hello ") = "hello"</td>
+                    </tr>
+                    <tr>
+                      <td class="ref-func">ltrim()/rtrim()</td>
+                      <td>Remove left/right spaces</td>
+                      <td>ltrim(" x"), rtrim("x ")</td>
+                    </tr>
+                    <tr>
+                      <td class="ref-func">explode()</td>
+                      <td>Split by delimiter</td>
+                      <td>explode(",", "a,b,c") = ["a","b","c"]</td>
+                    </tr>
+                    <tr>
+                      <td class="ref-func">implode()</td>
+                      <td>Join array</td>
+                      <td>implode(",", ["a","b"]) = "a,b"</td>
+                    </tr>
+                    <tr>
+                      <td class="ref-func">str_pad()</td>
+                      <td>Pad string</td>
+                      <td>str_pad("x", 5, "0", STR_PAD_LEFT)</td>
+                    </tr>
+                    <tr>
+                      <td class="ref-func">str_repeat()</td>
+                      <td>Repeat string</td>
+                      <td>str_repeat("*", 5) = "*****"</td>
+                    </tr>
+                    <tr>
+                      <td class="ref-func">strrev()</td>
+                      <td>Reverse string</td>
+                      <td>strrev("hello") = "olleh"</td>
+                    </tr>
+                    <tr>
+                      <td class="ref-func">str_contains()</td>
+                      <td>Check if contains (PHP 8)</td>
+                      <td>str_contains("hello", "ll")</td>
+                    </tr>
+                    <tr>
+                      <td class="ref-func">str_starts_with()</td>
+                      <td>Check start (PHP 8)</td>
+                      <td>str_starts_with("hello", "he")</td>
+                    </tr>
+                    <tr>
+                      <td class="ref-func">str_ends_with()</td>
+                      <td>Check end (PHP 8)</td>
+                      <td>str_ends_with("hello", "lo")</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- SLIDE 10: strlen -->
+              <div class="slide" id="s10">
+                <div class="content">
+                  <div class="sh">
+                    <div>
+                      <div class="st"><span>strlen()</span> — String Length</div>
+                      <div class="sd">Count characters</div>
+                    </div><span class="badge badge-m8">MODULE 8</span>
+                  </div>
+                  <div class="two-col">
+                    <div class="cc">
+                      <h3>Syntax</h3>
+                      <div class="syn">strlen(string $string): int</div>
+                    </div>
+                    <div class="cc">
+                      <h3>Use cases</h3>
+                      <ul>
+                        <li>Password validation</li>
+                        <li>Truncating text</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="lab">
+                    <div class="editor-panel">
+                      <div class="ep-top">
+                        <div class="ep-file">strlen_demo.php</div>
+                        <div class="ep-btns"><button class="btn-run"
+                            onclick="runCode('ta-strlen','out-strlen','ol-strlen')">▶
+                            Run</button><button class="btn-next"
+                            onclick="nextEx('strlen',['ta-strlen'],['out-strlen','ol-strlen'])">🔄 Next Example</button>
+                        </div>
+                      </div>
+                      <div class="ex-title" id="et-strlen">Example 1: Password Validator</div><textarea class="code-ta"
+                        id="ta-strlen" spellcheck="false"></textarea>
+                    </div>
+                    <div class="op">
+                      <div class="op-top">
+                        <div class="op-label" id="ol-strlen">Output</div>
+                      </div>
+                      <div class="op-content wait" id="out-strlen">▶ Click "Run" to execute PHP...</div>
+                    </div>
+                  </div>
+                  <div class="explanation" id="exp-strlen"></div>
+                </div>
+              </div>
+
+              <!-- SLIDE 11: strpos -->
+              <div class="slide" id="s11">
+                <div class="content">
+                  <div class="sh">
+                    <div>
+                      <div class="st"><span>strpos()</span> — Find Position</div>
+                      <div class="sd">Locate substring</div>
+                    </div><span class="badge badge-m8">MODULE 8</span>
+                  </div>
+                  <div class="two-col">
+                    <div class="cc">
+                      <h3>Important!</h3>
+                      <div class="warn">Always use <code>!== false</code> because index 0 is valid.</div>
+                    </div>
+                    <div class="cc">
+                      <h3>PHP 8 alternatives</h3>
+                      <ul>
+                        <li>str_contains()</li>
+                        <li>str_starts_with()</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="lab">
+                    <div class="editor-panel">
+                      <div class="ep-top">
+                        <div class="ep-file">strpos_demo.php</div>
+                        <div class="ep-btns"><button class="btn-run"
+                            onclick="runCode('ta-strpos','out-strpos','ol-strpos')">▶
+                            Run</button><button class="btn-next"
+                            onclick="nextEx('strpos',['ta-strpos'],['out-strpos','ol-strpos'])">🔄 Next Example</button>
+                        </div>
+                      </div>
+                      <div class="ex-title" id="et-strpos">Example 1: Search & Email Validation</div><textarea
+                        class="code-ta" id="ta-strpos" spellcheck="false"></textarea>
+                    </div>
+                    <div class="op">
+                      <div class="op-top">
+                        <div class="op-label" id="ol-strpos">Output</div>
+                      </div>
+                      <div class="op-content wait" id="out-strpos">▶ Click "Run" to execute PHP...</div>
+                    </div>
+                  </div>
+                  <div class="explanation" id="exp-strpos"></div>
+                </div>
+              </div>
+
+              <!-- SLIDE 12: substr -->
+              <div class="slide" id="s12">
+                <div class="content">
+                  <div class="sh">
+                    <div>
+                      <div class="st"><span>substr()</span> — Extract Substring</div>
+                      <div class="sd">Slice a string</div>
+                    </div><span class="badge badge-m8">MODULE 8</span>
+                  </div>
+                  <div class="two-col">
+                    <div class="cc">
+                      <h3>Parameters</h3>
+                      <div class="syn">substr($string, $offset, $length)</div>
+                    </div>
+                    <div class="cc">
+                      <h3>Examples</h3>
+                      <div class="syn">substr("Hello",1,3) → "ell"</div>
+                    </div>
+                  </div>
+                  <div class="lab">
+                    <div class="editor-panel">
+                      <div class="ep-top">
+                        <div class="ep-file">substr_demo.php</div>
+                        <div class="ep-btns"><button class="btn-run"
+                            onclick="runCode('ta-substr','out-substr','ol-substr')">▶
+                            Run</button><button class="btn-next"
+                            onclick="nextEx('substr',['ta-substr'],['out-substr','ol-substr'])">🔄 Next Example</button>
+                        </div>
+                      </div>
+                      <div class="ex-title" id="et-substr">Example 1: Text Truncation & URL Parsing</div><textarea
+                        class="code-ta" id="ta-substr" spellcheck="false"></textarea>
+                    </div>
+                    <div class="op">
+                      <div class="op-top">
+                        <div class="op-label" id="ol-substr">Output</div>
+                      </div>
+                      <div class="op-content wait" id="out-substr">▶ Click "Run" to execute PHP...</div>
+                    </div>
+                  </div>
+                  <div class="explanation" id="exp-substr"></div>
+                </div>
+              </div>
+
+              <!-- SLIDE 13: str_replace -->
+              <div class="slide" id="s13">
+                <div class="content">
+                  <div class="sh">
+                    <div>
+                      <div class="st"><span>str_replace()</span> — Replace</div>
+                      <div class="sd">Find and replace text</div>
+                    </div><span class="badge badge-m8">MODULE 8</span>
+                  </div>
+                  <div class="two-col">
+                    <div class="cc">
+                      <h3>Syntax</h3>
+                      <div class="syn">str_replace($search, $replace, $subject)</div>
+                    </div>
+                    <div class="cc">
+                      <h3>Multiple replacements</h3>
+                      <div class="syn">str_replace(["a","b"],["x","y"],$str)</div>
+                    </div>
+                  </div>
+                  <div class="lab">
+                    <div class="editor-panel">
+                      <div class="ep-top">
+                        <div class="ep-file">str_replace_demo.php</div>
+                        <div class="ep-btns"><button class="btn-run"
+                            onclick="runCode('ta-strreplace','out-strreplace','ol-strreplace')">▶ Run</button><button
+                            class="btn-next"
+                            onclick="nextEx('strreplace',['ta-strreplace'],['out-strreplace','ol-strreplace'])">🔄 Next
+                            Example</button></div>
+                      </div>
+                      <div class="ex-title" id="et-strreplace">Example 1: Template Engine & Text Cleaner</div><textarea
+                        class="code-ta" id="ta-strreplace" spellcheck="false"></textarea>
+                    </div>
+                    <div class="op">
+                      <div class="op-top">
+                        <div class="op-label" id="ol-strreplace">Output</div>
+                      </div>
+                      <div class="op-content wait" id="out-strreplace">▶ Click "Run" to execute PHP...</div>
+                    </div>
+                  </div>
+                  <div class="explanation" id="exp-strreplace"></div>
+                </div>
+              </div>
+
+              <!-- SLIDE 14: explode -->
+              <div class="slide" id="s14">
+                <div class="content">
+                  <div class="sh">
+                    <div>
+                      <div class="st"><span>explode()</span> — Split String</div>
+                      <div class="sd">String to array by delimiter</div>
+                    </div><span class="badge badge-m8">MODULE 8</span>
+                  </div>
+                  <div class="two-col">
+                    <div class="cc">
+                      <h3>Syntax</h3>
+                      <div class="syn">explode($separator, $string)</div>
+                    </div>
+                    <div class="cc">
+                      <h3>Use cases</h3>
+                      <ul>
+                        <li>CSV parsing</li>
+                        <li>Tag splitting</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="lab">
+                    <div class="editor-panel">
+                      <div class="ep-top">
+                        <div class="ep-file">explode_demo.php</div>
+                        <div class="ep-btns"><button class="btn-run"
+                            onclick="runCode('ta-explode','out-explode','ol-explode')">▶
+                            Run</button><button class="btn-next"
+                            onclick="nextEx('explode',['ta-explode'],['out-explode','ol-explode'])">🔄 Next
+                            Example</button>
+                        </div>
+                      </div>
+                      <div class="ex-title" id="et-explode">Example 1: CSV Parser & Query String</div><textarea
+                        class="code-ta" id="ta-explode" spellcheck="false"></textarea>
+                    </div>
+                    <div class="op">
+                      <div class="op-top">
+                        <div class="op-label" id="ol-explode">Output</div>
+                      </div>
+                      <div class="op-content wait" id="out-explode">▶ Click "Run" to execute PHP...</div>
+                    </div>
+                  </div>
+                  <div class="explanation" id="exp-explode"></div>
+                </div>
+              </div>
+
+              <!-- SLIDE 15: implode -->
+              <div class="slide" id="s15">
+                <div class="content">
+                  <div class="sh">
+                    <div>
+                      <div class="st"><span>implode()</span> — Join Array</div>
+                      <div class="sd">Array to string with glue</div>
+                    </div><span class="badge badge-m8">MODULE 8</span>
+                  </div>
+                  <div class="two-col">
+                    <div class="cc">
+                      <h3>Syntax</h3>
+                      <div class="syn">implode($separator, $array)</div>
+                    </div>
+                    <div class="cc">
+                      <h3>Examples</h3>
+                      <div class="syn">implode(", ", ["a","b","c"]) → "a, b, c"</div>
+                    </div>
+                  </div>
+                  <div class="lab">
+                    <div class="editor-panel">
+                      <div class="ep-top">
+                        <div class="ep-file">implode_demo.php</div>
+                        <div class="ep-btns"><button class="btn-run"
+                            onclick="runCode('ta-implode','out-implode','ol-implode')">▶
+                            Run</button><button class="btn-next"
+                            onclick="nextEx('implode',['ta-implode'],['out-implode','ol-implode'])">🔄 Next
+                            Example</button>
+                        </div>
+                      </div>
+                      <div class="ex-title" id="et-implode">Example 1: SQL Builder & HTML List</div><textarea
+                        class="code-ta" id="ta-implode" spellcheck="false"></textarea>
+                    </div>
+                    <div class="op">
+                      <div class="op-top">
+                        <div class="op-label" id="ol-implode">Output</div>
+                      </div>
+                      <div class="op-content wait" id="out-implode">▶ Click "Run" to execute PHP...</div>
+                    </div>
+                  </div>
+                  <div class="explanation" id="exp-implode"></div>
+                </div>
+              </div>
+
+              <!-- SLIDE 16: OOP WITH STRINGS -->
+              <div class="slide" id="s16">
+                <div class="content">
+                  <div class="sh">
+                    <div>
+                      <div class="oop-badge">⚙️ OOP</div>
+                      <div class="st">STRING <span>UTILITY CLASS</span></div>
+                      <div class="sd">Encapsulating string functions</div>
+                    </div><span class="badge badge-oop">OOP</span>
+                  </div>
+                  <div class="lab">
+                    <div class="editor-panel">
+                      <div class="ep-top">
+                        <div class="ep-file">TextProcessor.php</div>
+                        <div class="ep-btns"><button class="btn-run" onclick="runCode('ta-oop2','out-oop2','ol-oop2')">▶
+                            Run</button><button class="btn-next"
+                            onclick="nextEx('oop2',['ta-oop2'],['out-oop2','ol-oop2'])">🔄
+                            Next Example</button></div>
+                      </div>
+                      <div class="ex-title" id="et-oop2">Example 1: TextProcessor OOP Class</div><textarea
+                        class="code-ta" id="ta-oop2" spellcheck="false" style="min-height:280px"></textarea>
+                    </div>
+                    <div class="op">
+                      <div class="op-top">
+                        <div class="op-label" id="ol-oop2">Output</div>
+                      </div>
+                      <div class="op-content wait" id="out-oop2">▶ Click "Run" to execute PHP...</div>
+                    </div>
+                  </div>
+                  <div class="explanation" id="exp-oop2"></div>
+                </div>
+              </div>
+
+              <!-- SLIDE 17: QUIZ -->
+              <div class="slide" id="s17">
+                <div class="quiz-wrap">
+                  <div class="quiz-hdr">
+                    <div class="quiz-ttl">📝 KNOWLEDGE QUIZ</div>
+                    <div class="q-prog-txt">Question <span id="qCurr">1</span> of <span id="qTotal">23</span></div>
+                    <div class="q-prog-bar">
+                      <div class="q-prog-fill" id="qProgFill" style="width:4.3%"></div>
+                    </div>
+                  </div>
+                  <div id="quizArea"></div>
+                  <div class="results" id="quizResults">
+                    <div class="res-emoji" id="resEmoji">🎉</div>
+                    <div class="res-score" id="resScore">0/12</div>
+                    <div class="res-label" id="resLabel">Quiz Complete!</div>
+                    <div class="res-grid">
+                      <div class="res-stat">
+                        <div class="rs-n" id="rs-correct" style="color:var(--green)">0</div>
+                        <div class="rs-l">Correct</div>
+                      </div>
+                      <div class="res-stat">
+                        <div class="rs-n" id="rs-wrong" style="color:var(--red)">0</div>
+                        <div class="rs-l">Wrong</div>
+                      </div>
+                      <div class="res-stat">
+                        <div class="rs-n" id="rs-pct" style="color:var(--accent3)">0%</div>
+                        <div class="rs-l">Score</div>
+                      </div>
+                    </div><button class="nav-btn primary" onclick="restartQuiz()" style="margin:0 auto">🔄 Retake
+                      Quiz</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- SLIDE 18: COMPLETE -->
+              <div class="slide" id="s18">
+                <div class="complete">
+                  <div class="comp-emoji">🏆</div>
+                  <div class="comp-title">COURSE COMPLETE!</div>
+                  <div class="comp-sub">You've mastered PHP Modules 7 & 8 — Arrays & String Functions</div>
+                  <div class="comp-pills"><span class="pill">✓ Indexed Arrays</span><span class="pill">✓ Associative
+                      Arrays</span><span class="pill">✓ Multidimensional Arrays</span><span class="pill">✓ Array
+                      Functions</span><span class="pill">✓ strlen()</span><span class="pill">✓ strpos()</span><span
+                      class="pill">✓
+                      substr()</span><span class="pill">✓ str_replace()</span><span class="pill">✓ explode()</span><span
+                      class="pill">✓ implode()</span><span class="pill">✓ OOP with Arrays</span><span class="pill">✓ OOP
+                      with
+                      Strings</span></div><button class="nav-btn" onclick="goTo(0)">← Back to Start</button>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+          <div class="footer">
+            <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>← Previous</button>
+            <div class="dots" id="dotsContainer"></div>
+            <button class="nav-btn primary" id="nextBtn" onclick="navigate(1)">Next →</button>
+          </div>
+          <script>
+            // ========== SLIDE NAVIGATION (FULLY WORKING) ==========
+            const TOTAL_SLIDES = 18;
+            let current = 0;
+
+            function buildDots() {
+              const c = document.getElementById("dotsContainer");
+              c.innerHTML = "";
+              for (let i = 0; i < TOTAL_SLIDES; i++) {
+                const d = document.createElement("button");
+                d.className = "dot" + (i === current ? " active" : (i < current ? " visited" : ""));
+                d.onclick = () => goTo(i);
+                c.appendChild(d);
+              }
+            }
+
+            function updateHeader() {
+              const badges = ["", "m7", "m7", "m7", "m7", "m7", "m7", "oop", "m8", "m8", "m8", "m8", "m8", "m8", "m8", "m8", "oop", "quiz", "done"];
+              const labels = ["", "MODULE 7", "MODULE 7", "MODULE 7", "MODULE 7", "MODULE 7", "MODULE 7", "OOP", "MODULE 8", "MODULE 8", "MODULE 8", "MODULE 8", "MODULE 8", "MODULE 8", "MODULE 8", "MODULE 8", "OOP", "QUIZ", "DONE"];
+              const idx = Math.min(current + 1, badges.length - 1);
+              document.getElementById("hdrBadge").className = "badge badge-" + (badges[idx] || "m7");
+              document.getElementById("hdrBadge").textContent = labels[idx] || "";
+              document.getElementById("slideNum").textContent = (current + 1) + " / " + TOTAL_SLIDES;
+              document.getElementById("gProg").style.width = (((current + 1) / TOTAL_SLIDES) * 100) + "%";
+            }
+
+            function goTo(n) {
+              document.getElementById("s" + (current + 1)).classList.remove("active");
+              current = Math.max(0, Math.min(n, TOTAL_SLIDES - 1));
+              document.getElementById("s" + (current + 1)).classList.add("active");
+              document.getElementById("vp").scrollTop = 0;
+              document.getElementById("prevBtn").disabled = (current === 0);
+              document.getElementById("nextBtn").disabled = (current === TOTAL_SLIDES - 1);
+              buildDots();
+              updateHeader();
+              if (current === 16) renderQuestion(); // slide 17 is quiz (index 16)
+            }
+
+            function navigate(d) { goTo(current + d); }
+
+            // initial call
+            buildDots();
+            updateHeader();
+            document.getElementById("prevBtn").disabled = true;
+
+            // ========== PHP EXECUTION ==========
+            async function runCode(taId, outId, labelId) {
+              const code = document.getElementById(taId).value.trim();
+              const out = document.getElementById(outId);
+              const lbl = document.getElementById(labelId);
+              if (!code) {
+                out.className = "op-content err";
+                out.textContent = "Please enter PHP code.";
+                lbl.className = "op-label err";
+                lbl.textContent = "No code";
+                return;
+              }
+              out.className = "op-content wait";
+              out.textContent = "⏳ Running...";
+              lbl.className = "op-label running";
+              lbl.textContent = "Running...";
+              try {
+                const res = await fetch("exec.php", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                  body: "code=" + encodeURIComponent(code)
+                });
+                const text = await res.text();
+                if (text.startsWith("ERROR:")) {
+                  out.className = "op-content err";
+                  out.textContent = text.substring(6);
+                  lbl.className = "op-label err";
+                  lbl.textContent = "Error";
+                } else {
+                  out.className = "op-content";
+                  out.textContent = text || "(no output)";
+                  lbl.className = "op-label success";
+                  lbl.textContent = "Output";
+                }
+              } catch (e) {
+                out.className = "op-content err";
+                out.textContent = "Server error: " + e.message;
+                lbl.className = "op-label err";
+                lbl.textContent = "Error";
+              }
+            }
+
+            // ========== EXAMPLE DATA WITH EXPLANATIONS ==========
+            const exExamples = {
+              indexed: {
+                idx: 0, items: [
+                  { title: "📊 Student Grades Management", code: `<?php\n$grades = [95,87,72,88,91,65,98];\necho "Total Students: " . count($grades) . "\\n";\necho "Average: " . round(array_sum($grades)/count($grades),2) . "\\n";\nsort($grades);\necho "Sorted: " . implode(", ", $grades);`, expl: "<strong>📘 What it does:</strong> Creates an indexed array of grades. <code>count()</code> gives total, <code>array_sum()/count()</code> calculates average, <code>sort()</code> reorders, <code>implode()</code> displays as comma-separated. <strong>Key Concept:</strong> Indexed arrays start at index 0 and use numeric keys automatically assigned." },
+                  { title: "🛒 Shopping Cart - Add/Remove Items", code: `<?php\n$cart = ["Apple","Banana","Orange"];\necho "Initial: " . implode(", ", $cart) . "\\n";\narray_push($cart,"Mango","Grape");\necho "After push: " . implode(", ", $cart) . "\\n";\n$removed = array_shift($cart);\necho "Removed: $removed\\nRemaining: " . implode(", ", $cart);`, expl: "<strong>🛍️ How it works:</strong> <code>array_push()</code> adds elements to the END, <code>array_shift()</code> removes from FRONT – simulates a queue (FIFO - First In First Out). This is useful for processing items in order." },
+                  { title: "🔢 Finding Values & Positions", code: `<?php\n$colors = ["red","blue","green","yellow","red"];\necho "Red at: " . array_search("red", $colors) . "\\n";\necho "Contains green: " . (in_array("green", $colors) ? "Yes" : "No") . "\\n";\necho "All indices: " . implode(", ", array_keys(array_flip($colors)));`, expl: "<strong>🎯 Search Operations:</strong> <code>array_search()</code> finds the key/index, <code>in_array()</code> checks existence. Use these to validate or locate data." },
+                  { title: "📈 Statistics - Min, Max, Sum", code: `<?php\n$sales = [150,320,45,890,210,670];\necho "Total Sales: $" . array_sum($sales) . "\\n";\necho "Best Sale: $" . max($sales) . "\\n";\necho "Worst Sale: $" . min($sales) . "\\n";\necho "Count: " . count($sales) . " transactions";`, expl: "<strong>💰 Aggregation:</strong> Use <code>array_sum()</code>, <code>max()</code>, <code>min()</code>, <code>count()</code> for data analysis. Perfect for reports and dashboards." },
+                  { title: "🔀 Reverse & Unique Values", code: `<?php\n$items = [1,2,3,2,4,1,5];\n$unique = array_unique($items);\necho "Unique: " . implode(", ", $unique) . "\\n";\n$reversed = array_reverse($unique);\necho "Reversed: " . implode(", ", $reversed);`, expl: "<strong>🔄 Array Transformation:</strong> <code>array_unique()</code> removes duplicates, <code>array_reverse()</code> flips order. Useful for cleaning data and changing display order." }
+                ]
+              },
+              assoc: {
+                idx: 0, items: [
+                  { title: "👨‍🎓 Student Profile - Key-Value Pairs", code: `<?php\n$student = ["name"=>"Alice","age"=>20,"gpa"=>3.8,"major"=>"Computer Science"];\necho "Name: " . $student["name"] . "\\n";\necho "GPA: " . $student["gpa"] . "\\n";\nforeach($student as $key => $value) {\n  echo "$key: $value\\n";\n}`, expl: "<strong>📖 How Associative Arrays Work:</strong> Instead of numeric indices [0,1,2...], use meaningful string keys like 'name', 'age'. Access with <code>$array['key']</code>. Loop with <code>foreach($arr as $key=>$value)</code> to get both." },
+                  { title: "🌍 Country Data - Real World Example", code: `<?php\n$country = ["name"=>"Nigeria","capital"=>"Abuja","population"=>220000000,"continent"=>"Africa"];\necho "{$country['capital']} is the capital of {$country['name']}\\n";\necho "Located in: " . $country["continent"]\\n";\necho "Population: " . number_format($country["population"]);`, expl: "<strong>🗺️ Real-World Use:</strong> Store related data together. String interpolation with <code>\"text {$arr['key']} text\"</code> makes cleaner output." },
+                  { title: "🔧 Modifying & Adding Keys", code: `<?php\n$config = ["host"=>"localhost","port"=>3306,"user"=>"admin"];\necho "Before: " . json_encode($config) . "\\n";\n$config["password"] = "secret123";  // Add\n$config["port"] = 3307;  // Modify\nunset($config["user"]);  // Delete\necho "After: " . json_encode($config);`, expl: "<strong>✏️ Modify Arrays:</strong> Assign to add/change: <code>$arr['key'] = value</code>. Use <code>unset()</code> to delete. Use <code>json_encode()</code> to debug array contents." },
+                  { title: "🔍 Sorting Associative Arrays", code: `<?php\n$scores = ["alice"=>95,"bob"=>87,"charlie"=>92,"diana"=>88];\necho "Original: " . json_encode($scores) . "\\n";\nasort($scores);  // Sort by value, keep keys\necho "Sorted values: " . json_encode($scores) . "\\n";\nksort($scores);  // Sort by key\necho "Sorted keys: " . json_encode($scores);`, expl: "<strong>📊 Sorting Methods:</strong> <code>asort()</code> sorts by VALUE keeping keys, <code>ksort()</code> sorts by KEY. Opposite: <code>arsort()</code>, <code>krsort()</code> for descending." },
+                  { title: "🔑 Working with Keys & Values", code: `<?php\n$user = ["id"=>1001,"username"=>"alice_wonder","email"=>"alice@example.com"];\necho "Keys: " . implode(", ", array_keys($user)) . "\\n";\necho "Values: " . implode(", ", array_values($user)) . "\\n";\nif (array_key_exists("email", $user)) echo "Email exists in array\\n";`, expl: "<strong>🔑 Key Functions:</strong> <code>array_keys()</code> gets all keys, <code>array_values()</code> gets all values as indexed array, <code>array_key_exists()</code> checks if key exists (better than isset for null values)." }
+                ]
+              },
+              multi: {
+                idx: 0, items: [
+                  { title: "🏫 2D Array - Class Roster", code: `<?php\n$classroom = [\n  ["name"=>"Alice","score"=>92],\n  ["name"=>"Bob","score"=>78],\n  ["name"=>"Charlie","score"=>85]\n];\nforeach($classroom as $student) {\n  echo "{$student['name']}: {$student['score']}%\\n";\n}\n$grades = array_column($classroom, "score");\necho "Average: " . round(array_sum($grades)/count($grades), 2);`, expl: "<strong>📚 2D Arrays Explained:</strong> Array of associative arrays - each element is itself an array. Access nested values: <code>$arr[0]['key']</code>. Use <code>array_column()</code> to extract single column." },
+                  { title: "📍 3D Array - Store Hierarchy", code: `<?php\n$company = [\n  "sales" => [\n    ["id"=>1,"name"=>"John","salary"=>50000],\n    ["id"=>2,"name"=>"Jane","salary"=>55000]\n  ],\n  "it" => [\n    ["id"=>3,"name"=>"Mike","salary"=>70000]\n  ]\n];\necho "Sales team first employee: " . $company["sales"][0]["name"] . "\\n";\necho "IT department employee salary: $" . $company["it"][0]["salary"];`, expl: "<strong>🏢 3D Arrays:</strong> Arrays inside arrays inside arrays. Access with <code>$arr['key1'][0]['key2']</code>. Build hierarchical data like org charts, catalogs, menus." },
+                  { title: "🎮 Game Board - Numeric Multidimensional", code: `<?php\n$board = [\n  [1, 2, 3],\n  [4, 5, 6],\n  [7, 8, 9]\n];\necho "3x3 Grid:\\n";\nfor ($i = 0; $i < 3; $i++) {\n  for ($j = 0; $j < 3; $j++) {\n    echo $board[$i][$j] . " ";\n  }\n  echo "\\n";\n}`, expl: "<strong>🎯 Nested Loops:</strong> Use two <code>for</code> loops for 2D grids. Access with <code>$board[row][col]</code>. Useful for matrices, game boards, image pixels." },
+                  { title: "📦 Product Inventory System", code: `<?php\n$inventory = [\n  ["product"=>"Laptop","price"=>1200,"qty"=>5],\n  ["product"=>"Phone","price"=>800,"qty"=>15],\n  ["product"=>"Tablet","price"=>500,"qty"=>8]\n];\n$total_value = 0;\nforeach($inventory as $item) {\n  $value = $item["price"] * $item["qty"];\n  echo $item["product"] . ": $" . $value . "\\n";\n  $total_value += $value;\n}\necho "Total Inventory Value: $" . $total_value;`, expl: "<strong>💼 Business Logic:</strong> Combine 2D arrays with calculations to build real systems. Loop and calculate totals, filter, or transform data." },
+                  { title: "🔗 Merging & Processing Multi-level Data", code: `<?php\n$data = [\n  ["id"=>1,"tags"=>["php","web"]],\n  ["id"=>2,"tags"=>["python","ai"]],\n  ["id"=>3,"tags"=>["php","laravel"]]\n];\nforeach($data as $item) {\n  echo "ID {$item['id']}: " . implode(", ", $item["tags"]) . "\\n";\n}`, expl: "<strong>🏷️ Complex Structures:</strong> Mix different data types - strings, numbers, and arrays in one structure. Process with nested loops and functions." }
+                ]
+              },
+              af1: {
+                idx: 0, items: [
+                  { title: "📦 Stack & Queue Operations", code: `<?php\n// Queue: FIFO (First In First Out)\n$queue = [];\narray_push($queue,"Customer A","Customer B","Customer C");\necho "Queue: " . implode(", ", $queue) . "\\n";\n$first = array_shift($queue);\necho "Served: $first\\n";\necho "Remaining: " . implode(", ", $queue) . "\\n\\n";\n\n// Stack: LIFO (Last In First Out)\n$stack = ["Book 1","Book 2","Book 3"];\necho "Stack: " . implode(", ", $stack) . "\\n";\n$top = array_pop($stack);\necho "Removed: $top\\n";\necho "Remaining: " . implode(", ", $stack);`, expl: "<strong>⚙️ Data Structures:</strong> <code>array_push()/$</code> + <code>array_shift()</code> = Queue. <code>array_push()</code> + <code>array_pop()</code> = Stack. Understanding these patterns is critical for algorithms and system design." },
+                  { title: "🔢 Sorting Arrays - Multiple Methods", code: `<?php\n$numbers = [64,34,25,12,22,11,90];\n$copy = $numbers;\necho "Original: " . implode(", ", $numbers) . "\\n";\nsort($copy);  // Ascending\necho "Ascending: " . implode(", ", $copy) . "\\n";\n$copy = $numbers;\nrsort($copy);  // Descending\necho "Descending: " . implode(", ", $copy) . "\\n";\n$copy = $numbers;\nuasort($copy, function($a,$b) { return $b <=> $a; });  // Custom sort\necho "Custom desc: " . implode(", ", $copy);`, expl: "<strong>📊 Sort Functions:</strong> <code>sort()</code> ascending, <code>rsort()</code> descending. These modify original array. For associative arrays use <code>asort()</code>/<code>arsort()</code>, <code>ksort()</code>/<code>krsort()</code>." },
+                  { title: "➕ Adding & Removing Elements", code: `<?php\n$items = ["banana","apple"];\necho "Start: " . implode(", ", $items) . "\\n";\n// Add to end\narray_push($items,"cherry");\necho "After push: " . implode(", ", $items) . "\\n";\n// Add to start\narray_unshift($items,"orange");\necho "After unshift: " . implode(", ", $items) . "\\n";\n// Remove from end\n$last = array_pop($items);\necho "Popped: $last, Remaining: " . implode(", ", $items) . "\\n";\n// Remove from start\n$first = array_shift($items);\necho "Shifted: $first, Remaining: " . implode(", ", $items);`, expl: "<strong>✏️ Modifying Arrays:</strong> <code>array_push()</code>/<code>array_pop()</code> affect END. <code>array_unshift()</code>/<code>array_shift()</code> affect START. All modify original array." },
+                  { title: "🔍 Finding Min, Max, Sum & Count", code: `<?php\n$sales = [250,180,420,95,310,505,220];\necho "Data: " . implode(", ", $sales) . "\\n";\necho "Count: " . count($sales) . " transactions\\n";\necho "Total: $" . array_sum($sales) . "\\n";\necho "Highest: $" . max($sales) . "\\n";\necho "Lowest: $" . min($sales) . "\\n";\necho "Average: $" . round(array_sum($sales)/count($sales), 2) . "\\n";`, expl: "<strong>💰 Aggregation Functions:</strong> <code>count()</code> = number of elements, <code>array_sum()</code> = total, <code>max()</code>/<code>min()</code> = extreme values. Essential for statistics and reporting." },
+                  { title: "🔄 Merging & Slicing Arrays", code: `<?php\n$team1 = ["Alice","Bob"];\n$team2 = ["Charlie","Diana"];\n$all = array_merge($team1, $team2);\necho "Merged: " . implode(", ", $all) . "\\n";\n$slice = array_slice($all, 1, 2);  // Start index 1, take 2\necho "Slice [1,2]: " . implode(", ", $slice) . "\\n";\n$split = array_splice($all, 2, 2, ["Eve","Frank"]);  // Remove and replace\necho "After splice: " . implode(", ", $all) . "\\n";\necho "Removed: " . implode(", ", $split);`, expl: "<strong>🔗 Array Combinations:</strong> <code>array_merge()</code> combines arrays. <code>array_slice()</code> extracts portion (doesn't modify). <code>array_splice()</code> removes/replaces elements and modifies original." }
+                ]
+              },
+              af2: {
+                idx: 0, items: [
+                  { title: "🔍 Filter - Keep Matching Elements", code: `<?php\n$numbers = [1,2,3,4,5,6,7,8,9,10];\necho "Original: " . implode(", ", $numbers) . "\\n";\n// Keep even numbers\n$evens = array_filter($numbers, function($n) {\n  return $n % 2 == 0;\n});\necho "Even: " . implode(", ", $evens) . "\\n";\n// Keep > 5\n$gt5 = array_filter($numbers, function($n) {\n  return $n > 5;\n});\necho "> 5: " . implode(", ", $gt5);`, expl: "<strong>🎯 Filtering Explained:</strong> <code>array_filter()</code> keeps elements WHERE callback returns true. Perfect for validation, searching, cleaning data. Preserves keys." },
+                  { title: "🔄 Map - Transform Each Element", code: `<?php\n$numbers = [1,2,3,4,5];\necho "Original: " . implode(", ", $numbers) . "\\n";\n// Square each\n$squares = array_map(function($n) {\n  return $n * $n;\n}, $numbers);\necho "Squared: " . implode(", ", $squares) . "\\n";\n// Double and add 10\n$transformed = array_map(fn($n) => ($n * 2) + 10, $numbers);\necho "Transform: " . implode(", ", $transformed);`, expl: "<strong>🔀 Mapping Explained:</strong> <code>array_map()</code> applies callback to EACH element, returns new array. Arrow functions <code>fn($x) => expression</code> are cleaner syntax in PHP 7.4+." },
+                  { title: "📊 Reduce - Calculate Single Value", code: `<?php\n$numbers = [10,20,30,40,50];\necho "Numbers: " . implode(", ", $numbers) . "\\n";\n// Sum using reduce\n$sum = array_reduce($numbers, function($carry, $item) {\n  return $carry + $item;\n}, 0);\necho "Sum: $sum\\n";\n// Multiply all\n$product = array_reduce($numbers, fn($c,$i) => $c * $i, 1);\necho "Product: $product";`, expl: "<strong>➕ Reduce Explained:</strong> <code>array_reduce()</code> processes array to single value. <code>$carry</code> = accumulator, <code>$item</code> = current element. Use for sum, product, building strings, etc." },
+                  { title: "🔎 Search & In_array - Finding Data", code: `<?php\n$fruits = ["apple","banana","cherry","date"];\necho "Fruits: " . implode(", ", $fruits) . "\\n";\n// Check if exists\nif (in_array("banana", $fruits)) {\n  echo "✓ Banana found!\\n";\n}\n// Find position/index\n$pos = array_search("cherry", $fruits);\necho "Cherry at index: $pos\\n";\n// Case-insensitive search\n$pos2 = array_search("BANANA", $fruits, true);\necho "BANANA (case-sensitive): " . ($pos2 !== false ? $pos2 : "Not found");`, expl: "<strong>🔍 Search Functions:</strong> <code>in_array()</code> returns true/false. <code>array_search()</code> returns key or false. Third param: true=strict type checking, false=loose." },
+                  { title: "🏆 Combining Operations", code: `<?php\n$students = [\n  ["name"=>"Alice","score"=>92],\n  ["name"=>"Bob","score"=>45],\n  ["name"=>"Charlie","score"=>88],\n  ["name"=>"Diana","score"=>55]\n];\n// Get scores > 70\n$passing = array_filter($students, fn($s) => $s["score"] > 70);\n// Get just names\n$names = array_map(fn($s) => $s["name"], $passing);\necho "Passed: " . implode(", ", $names) . "\\n";\n// Get average of all scores\n$scores = array_column($students, "score");\n$avg = array_sum($scores) / count($scores);\necho "Class average: " . round($avg, 2);`, expl: "<strong>💡 Advanced Patterns:</strong> Chain operations: filter → map → transform. Use <code>array_column()</code> to extract field from 2D array. This is functional programming style." }
+                ]
+              },
+              oop1: {
+                idx: 0, items: [
+                  { title: "🛍️ ShoppingCart Class - Encapsulation", code: `<?php\nclass Cart {\n  private array $items = [];\n  \n  public function add(string $name, float $price): static {\n    if ($price <= 0) throw new Exception("Price must be positive");\n    $this->items[] = ['name'=>$name,'price'=>$price];\n    return $this;  // Enable chaining\n  }\n  \n  public function getItems(): array {\n    return $this->items;\n  }\n  \n  public function total(): float {\n    return array_sum(array_map(fn($i)=>$i['price'], $this->items));\n  }\n}\n\n$cart = new Cart();\n$cart->add("Laptop",1200)->add("Mouse",25)->add("Keyboard",75);\necho "Total: $" . $cart->total();`, expl: "<strong>🧩 OOP Patterns:</strong> Private array $items cannot be modified directly - controlled via methods. Method chaining (return $this) allows fluent interface: ->add()->add()->total(). Data validation happens inside class." },
+                  { title: "📚 Library Management System", code: `<?php\nclass Library {\n  private array $books = [];\n  \n  public function addBook(array $book): void {\n    $this->books[] = $book;  // {id, title, author, available}\n  }\n  \n  public function borrowBook(int $id): string {\n    foreach($this->books as &$book) {\n      if ($book['id'] === $id && $book['available']) {\n        $book['available'] = false;\n        return "Borrowed: " . $book['title'];\n      }\n    }\n    return "Not available";\n  }\n  \n  public function availableBooks(): array {\n    return array_filter($this->books, fn($b) => $b['available']);\n  }\n}\n\n$lib = new Library();\n$lib->addBook(['id'=>1,'title'=>'PHP Guide','author'=>'John','available'=>true]);\n$lib->addBook(['id'=>2,'title'=>'Web Dev','author'=>'Jane','available'=>true]);\necho $lib->borrowBook(1) . "\\n";\necho "Available: " . count($lib->availableBooks());`, expl: "<strong>📖 Business Logic:</strong> Class manages collection of arrays. Use <code>&$book</code> to modify array element by reference. <code>array_filter()</code> finds available items. Private data ensures consistency." },
+                  { title: "🏠 Real Estate Property Manager", code: `<?php\nclass PropertyManager {\n  private array $properties = [];\n  \n  public function addProperty(array $prop): static {\n    $prop['dateAdded'] = date('Y-m-d');\n    $this->properties[] = $prop;\n    return $this;\n  }\n  \n  public function filterByPrice(float $min, float $max): array {\n    return array_filter($this->properties, \n      fn($p) => $p['price'] >= $min && $p['price'] <= $max\n    );\n  }\n  \n  public function getStats(): array {\n    $prices = array_column($this->properties, 'price');\n    return [\n      'total' => count($this->properties),\n      'avgPrice' => round(array_sum($prices)/count($prices), 2),\n      'maxPrice' => max($prices),\n      'minPrice' => min($prices)\n    ];\n  }\n}\n\n$mgr = new PropertyManager();\n$mgr->addProperty(['address'=>'123 Main','price'=>250000])\n    ->addProperty(['address'=>'456 Oak','price'=>320000])\n    ->addProperty(['address'=>'789 Pine','price'=>180000]);\necho "3BR homes: " . count($mgr->filterByPrice(200000, 300000))\\n";\necho "Average: $" . $mgr->getStats()['avgPrice'];`, expl: "<strong>🏢 Real-world Application:</strong> Use class methods to manage complex array operations. Combine filtering, aggregation, date handling. Method chaining for cleaner code." },
+                  { title: "👥 User Management - Advanced OOP", code: `<?php\nclass UserManager {\n  private array $users = [];\n  private int $nextId = 1;\n  \n  public function createUser(string $name, string $email): static {\n    $this->users[] = [\n      'id' => $this->nextId++,\n      'name' => $name,\n      'email' => $email,\n      'created' => time()\n    ];\n    return $this;\n  }\n  \n  public function findById(int $id): ?array {\n    $found = array_filter($this->users, fn($u) => $u['id'] === $id);\n    return array_shift($found) ?? null;\n  }\n  \n  public function getAllUserNames(): array {\n    return array_column($this->users, 'name');\n  }\n  \n  public function count(): int { return count($this->users); }\n}\n\n$um = new UserManager();\n$um->createUser('Alice','alice@test.com')\n   ->createUser('Bob','bob@test.com')\n   ->createUser('Charlie','charlie@test.com');\necho "Total users: " . $um->count() . "\\n\";\necho "All names: " . implode(', ', $um->getAllUserNames());`, expl: "<strong>👥 Auto-increment Pattern:</strong> Simulate database with auto-incrementing IDs. Use <code>findById()</code> to search, <code>?array</code> return type for nullable. Combine <code>array_column()</code> with array operations." },
+                  { title: "🎮 Game Inventory System", code: `<?php\nclass Inventory {\n  private array $items = [];\n  \n  public function addItem(string $name, int $qty, float $weight): static {\n    $this->items[] = compact('name', 'qty', 'weight');\n    return $this;\n  }\n  \n  public function getTotalWeight(): float {\n    return array_sum(array_map(fn($i) => $i['weight'] * $i['qty'], $this->items));\n  }\n  \n  public function getHeaviestItem(): ?array {\n    $weights = array_map(fn($i) => $i['weight'] * $i['qty'], $this->items);\n    $maxIdx = array_key_max($weights) ?? -1;\n    return $maxIdx >= 0 ? $this->items[$maxIdx] : null;\n  }\n  \n  public function canCarry(float $maxWeight): bool {\n    return $this->getTotalWeight() <= $maxWeight;\n  }\n}\n\n$inv = new Inventory();\n$inv->addItem('Sword', 1, 2.5)->addItem('Shield', 1, 3.0)->addItem('Potion', 5, 0.1);\necho "Total weight: " . $inv->getTotalWeight() . " kg\\n\";\necho "Can carry 10kg: \" . ($inv->canCarry(10) ? 'Yes' : 'No');`, expl: "<strong>🎮 Game Logic:</strong> Complex calculations on array data. Use <code>compact()</code> to create array from variables. Combine multiple array functions for game mechanics like weight limits." }
+                ]
+              },
+              strlen: {
+                idx: 0, items: [
+                  { title: "🔐 Password Strength Validator", code: `<?php\nfunction validatePassword(string $pwd): string {\n  $len = strlen($pwd);\n  if ($len < 8) return \"Too short ($len characters)\";\n  if ($len > 128) return \"Too long ($len characters)\";\n  if (!preg_match('/[a-z]/', $pwd)) return \"Needs lowercase\";\n  if (!preg_match('/[A-Z]/', $pwd)) return \"Needs uppercase\";\n  if (!preg_match('/[0-9]/', $pwd)) return \"Needs number\";\n  return \"✓ Strong password\";\n}\n\necho validatePassword(\"weak\") . \"\\n\";\necho validatePassword(\"MyPass123\") . \"\\n\";`, expl: "<strong>🔐 Validation Pattern:</strong> <code>strlen()</code> gets length, use with regex for complexity checking. Build validation rules progressively. Return descriptive messages." },
+                  { title: "📝 Text Truncation with Ellipsis", code: `<?php\nfunction truncate(string $text, int $limit = 50): string {\n  $len = strlen($text);\n  if ($len > $limit) {\n    return substr($text, 0, $limit) . \"...\";\n  }\n  return $text;\n}\n\necho truncate(\"The quick brown fox jumps over the lazy dog\", 20) . \"\\n\";\necho truncate(\"Short\", 20) . \"\\n\";`, expl: "<strong>📏 Truncation:</strong> Check length with <code>strlen()</code>, use <code>substr()</code> to extract portion. Common for displaying summaries on websites." },
+                  { title: "🔤 Character Counting Analysis", code: `<?php\nfunction analyzeText(string $text): array {\n  $text = strtolower($text);\n  $len = strlen($text);\n  $words = str_word_count($text);\n  $chars = $len - substr_count($text, \" \");\n  \n  return [\n    'total' => $len,\n    'words' => $words,\n    'chars' => $chars,\n    'avg_word_length' => round($chars / $words, 2)\n  ];\n}\n\n$analysis = analyzeText(\"The quick brown fox\");\necho \"Stats: \" . json_encode($analysis);`, expl: "<strong>📊 Text Analysis:</strong> Use <code>strlen()</code>, <code>str_word_count()</code>, <code>substr_count()</code> to analyze text. Calculate averages for readability metrics." },
+                  { title: "💬 Message Length Checker for APIs", code: `<?php\nfunction validateMessage(string $msg, int $minLen = 1, int $maxLen = 280): bool {\n  $len = strlen($msg);\n  $trimmed = strlen(trim($msg));\n  \n  if ($trimmed === 0) return false;  // Empty\n  if ($len < $minLen) return false;  // Too short\n  if ($len > $maxLen) return false;  // Too long\n  return true;\n}\n\necho (validateMessage(\"Hello world\", 5, 20) ? \"✓ Valid\" : \"✗ Invalid\") . \"\\n\";\necho (validateMessage(\"Hi\", 5, 20) ? \"✓ Valid\" : \"✗ Invalid\") . \"\\n\";`, expl: "<strong>💬 Form Validation:</strong> Common pattern for social media posts, SMS, chat messages. Check both trimmed and untrimmed length. Return boolean for clean validation chains." },
+                  { title: "🎯 String Padding & Formatting", code: `<?php\n$username = \"alice\";\n$maxLen = 15;\n$padded = str_pad($username, $maxLen, \".\", STR_PAD_RIGHT);\necho \"Username: [$padded]\\n\";\n\n$num = 42;\n$formatted = str_pad((string)$num, 5, \"0\", STR_PAD_LEFT);\necho \"Zero-padded: $formatted\\n\";\n\n$len = strlen($username);\n$percent = round(($len / $maxLen) * 100);\necho \"Characters: $len/$maxLen ($percent%)\";`, expl: "<strong>🎨 Formatting:</strong> <code>str_pad()</code> pads strings - useful for tables, data alignment, zero-padding numbers. Common in reports and CLI output." }
+                ]
+              },
+              strpos: {
+                idx: 0, items: [
+                  { title: "🔎 Find Substring Position", code: `<?php\n$text = \"The quick brown fox jumps over the lazy dog\";\n$word = \"brown\";\n$pos = strpos($text, $word);\n\nif ($pos !== false) {\n  echo \"Found '$word' at position $pos\\n\";\n  echo \"Before: \" . substr($text, 0, $pos) . \"\\n\";\n  echo \"Word: \" . substr($text, $pos, strlen($word)) . \"\\n\";\n} else {\n  echo \"Not found\";\n}`, expl: "<strong>⚠️ Critical:</strong> Always use <code>!== false</code> not just <code>if ($pos)</code> because 0 IS a valid position. strpos() returns false when NOT found, or position number (0 or greater) when found." },
+                  { title: "✉️ Email Validation with strpos", code: `<?php\nfunction isValidEmail(string $email): bool {\n  $atPos = strpos($email, \"@\");\n  $dotPos = strrpos($email, \".\");  // Last dot\n  \n  if ($atPos === false || $dotPos === false) return false;\n  if ($atPos < 1 || $atPos === strlen($email) - 1) return false;\n  if ($dotPos <= $atPos + 2 || $dotPos === strlen($email) - 1) return false;\n  return true;\n}\n\necho (isValidEmail(\"john@example.com\") ? \"✓ Valid\" : \"✗ Invalid\") . \"\\n\";\necho (isValidEmail(\"invalid@email\") ? \"✓ Valid\" : \"✗ Invalid\") . \"\\n\";`, expl: "<strong>📧 Email Parsing:</strong> Find @ symbol with <code>strpos()</code>, find last . with <code>strrpos()</code>. Validate basic structure. Note: proper email validation needs regex." },
+                  { title: "🔍 Search & Replace Using strpos", code: `<?php\nfunction replaceFirst(string $search, string $replace, string $subject): string {\n  $pos = strpos($subject, $search);\n  if ($pos !== false) {\n    return substr($subject, 0, $pos) . $replace . substr($subject, $pos + strlen($search));\n  }\n  return $subject;\n}\n\n$text = \"PHP is great. PHP is awesome. PHP rocks.\";\necho replaceFirst(\"PHP\", \"Python\", $text) . \"\\n\";`, expl: "<strong>🔄 Manual Replace:</strong> Find position with <code>strpos()</code>, extract parts with <code>substr()</code>, reassemble. Use this when str_replace() won't work. Demonstrates composition of string functions." },
+                  { title: "🌐 URL Parsing & Validation", code: `<?php\nfunction getDomain(string $url): ?string {\n  $start = strpos($url, \"://\");\n  if ($start === false) return null;\n  $start += 3;  // After ://\n  \n  $end = strpos($url, \"/\", $start);\n  if ($end === false) $end = strlen($url);\n  \n  return substr($url, $start, $end - $start);\n}\n\necho getDomain(\"https://example.com/page\") . \"\\n\";\necho getDomain(\"http://sub.domain.org\") . \"\\n\";\necho getDomain(\"invalid\") . \"\\n\";`, expl: "<strong>🌐 URL Processing:</strong> Use strpos() to find markers like '://' and '/'. Calculate substring position and length. Combine with substr() for extraction." },
+                  { title: "🏷️ Tag & Hashtag Extraction", code: `<?php\nfunction extractHashtags(string $text): array {\n  $tags = [];\n  $pos = 0;\n  while (($pos = strpos($text, \"#\", $pos)) !== false) {\n    $pos++;  // Skip the #\n    $end = strpos($text, \" \", $pos);\n    if ($end === false) $end = strlen($text);\n    $tags[] = substr($text, $pos - 1, $end - $pos + 1);\n    $pos = $end;\n  }\n  return $tags;\n}\n\n$tweet = \"I love #PHP and #WebDevelopment #coding\";\nprint_r(extractHashtags($tweet));`, expl: "<strong>🏷️ Pattern Extraction:</strong> Use loop with strpos() to find all occurrences. Track position and length. Extract text between markers. Essential for parsing social media." }
+                ]
+              },
+              substr: {
+                idx: 0, items: [
+                  { title: "✂️ Extract Substring - Basics", code: `<?php\n$str = \"Hello World PHP\";\n\n// From position 0, length 5\necho substr($str, 0, 5) . \"\\n\";      // Hello\n\n// From position 6 (default to end)\necho substr($str, 6) . \"\\n\";         // World PHP\n\n// From end: position -3 gets last 3 chars\necho substr($str, -3) . \"\\n\";        // PHP\n\n// Negative start and length\necho substr($str, -5, 3) . \"\\n\";     // P (start -5, take 3)\n\n// Check if extraction is valid\necho (substr($str, 0, 5) === \"Hello\" ? \"✓\" : \"✗\") . \"\\n\";`, expl: "<strong>✂️ Syntax:</strong> <code>substr(string, start, length)</code>. Negative start: count from end (-1 = last char). Negative length: omit last N chars. Return false if invalid." },
+                  { title: "🎬 Video Timestamp Extraction", code: `<?php\n$filename = \"movie_2024-01-15_1920x1080_25fps.mp4\";\n\n// Extract date\n$dateStart = strpos($filename, \"_\") + 1;\n$dateEnd = strpos($filename, \"_\", $dateStart);\n$date = substr($filename, $dateStart, $dateEnd - $dateStart);\necho \"Date: $date\\n\";\n\n// Extract resolution\n$resStart = strrpos($filename, \"_\") + 1;\n$resEnd = strrpos($filename, \"_\");\nif ($resEnd === false) $resEnd = strpos($filename, \".\", $resStart);\n$resolution = substr($filename, $resStart, $resEnd - $resStart);\necho \"Resolution: $resolution\\n\";`, expl: "<strong>📹 File Parsing:</strong> Combine strpos()/strrpos() to find markers, use substr() to extract sections. Real-world pattern for parsing filenames, logs, codes." },
+                  { title: "🔐 Mask Sensitive Data", code: `<?php\nfunction maskCreditCard(string $card): string {\n  // Show only last 4 digits\n  if (strlen($card) >= 4) {\n    return str_repeat(\"*\", strlen($card) - 4) . substr($card, -4);\n  }\n  return $card;\n}\n\necho maskCreditCard(\"1234567890123456\") . \"\\n\";  // ************3456\n\n$email = \"alice@example.com\";\n$at = strpos($email, \"@\");\n$masked = substr($email, 0, 1) . \"***\" . substr($email, $at - 1);\necho \"Email: $masked\\n\";  // a***@example.com`, expl: "<strong>🔒 Security:</strong> Use substr() to hide most characters. Keep first and last for recognition. Use str_repeat() for padding. Essential for PCI compliance and privacy." },
+                  { title: "🌍 Phone Number Formatting", code: `<?php\nfunction formatPhone(string $phone): string {\n  $clean = preg_replace('/\\D/', '', $phone);  // Remove non-digits\n  if (strlen($clean) === 10) {\n    $area = substr($clean, 0, 3);\n    $exchange = substr($clean, 3, 3);\n    $number = substr($clean, 6, 4);\n    return \"($area) $exchange-$number\";\n  }\n  return $phone;\n}\n\necho formatPhone(\"2025551234\") . \"\\n\";      // (202) 555-1234\necho formatPhone(\"+1 (202) 555-1234\") . \"\\n\";  // (202) 555-1234`, expl: "<strong>📱 Formatting:</strong> Clean input, extract parts with fixed lengths using substr(). Reconstruct with formatting. Used for phone, SSN, account numbers." },
+                  { title: "🎨 Color Code Parsing", code: `<?php\nfunction parseHexColor(string $hex): array {\n  $hex = ltrim($hex, \"#\");\n  if (strlen($hex) !== 6) return ['error' => 'Invalid hex color'];\n  \n  $r = hexdec(substr($hex, 0, 2));\n  $g = hexdec(substr($hex, 2, 2));\n  $b = hexdec(substr($hex, 4, 2));\n  \n  return ['red' => $r, 'green' => $g, 'blue' => $b, 'rgb' => \"rgb($r,$g,$b)\"];\n}\n\n$color = parseHexColor(\"#FF5733\");\necho \"RGB: \" . $color['rgb'] . \"\\n\";  // RGB: rgb(255, 87, 51)\necho \"Red value: \" . $color['red'];   // Red value: 255`, expl: "<strong>🎨 Binary Data:</strong> Use substr() to extract 2-char chunks. Convert from hex with hexdec(). Used for color codes, encoding, binary protocols." }
+                ]
+              },
+              strreplace: {
+                idx: 0, items: [
+                  { title: "🧹 Text Cleaning & Sanitization", code: `<?php\nfunction cleanUserInput(string $input): string {\n  $bad = ["<script>", "<\\/script>", "onclick=", "SELECT", "DROP"];\n  $clean = str_ireplace($bad, "", $input);\n  while (strpos($clean, "  ") !== false) {\n    $clean = str_replace("  ", " ", $clean);\n  }\n  return trim($clean);\n}\n\n$input = "<script>xss<\\/script> Hello";\necho cleanUserInput($input);\n?>`, expl: "<strong>🧹 Security:</strong> Use str_ireplace() to remove dangerous patterns. Basic sanitization (use htmlspecialchars() for production)." }]
+              },
+              explode: {
+                idx: 0, items: [
+                  { title: "📂 Split CSV String", code: `<?php\n$csv = \"apple,banana,cherry,date,elderberry\";\necho \"CSV: $csv\\n\";\n\n// Split by comma\n$fruits = explode(\",\", $csv);\necho \"Count: \" . count($fruits) . \"\\n\";\n\nforeach($fruits as $i => $fruit) {\n  echo ($i + 1) . \". \" . trim($fruit) . \"\\n\";\n}\n\n// Limit results\n$limited = explode(\",\", $csv, 3);\necho \"\\nFirst 3: \" . implode(\" | \", $limited);`, expl: "<strong>📎 CSV Parsing:</strong> <code>explode(delimiter, string)</code> splits string into array. Use trim() to remove whitespace. Optional third param limits results: <code>explode(\",\", $csv, 3)</code> returns max 3 elements." },
+                  { title: "🏷️ Tag System", code: `<?php\n$tagString = \"php,web,development,coding,tutorial\";\n$tags = explode(\",\", $tagString);\n\necho \"Tags: \" . implode(\", \", array_map('trim', $tags)) . \"\\n\";\necho \"Total: \" . count($tags) . \"\\n\";\n\n// Search tags\n$search = \"web\";\nif (in_array($search, $tags)) {\n  echo \"✓ Found tag: $search\\n\";\n}\n\n// Filter tags\n$filtered = array_filter(\n  $tags,\n  fn($t) => strlen(trim($t)) > 3\n);\necho \"Long tags: \" . implode(\", \", $filtered);`, expl: "<strong>🏷️ Tag Management:</strong> Store tags as comma-separated string, explode to array for processing. Combine with array_map(), array_filter() for cleaning and filtering. Use implode() to reconstruct." },
+                  { title: "📍 Path/URL Parsing", code: `<?php\n$url = \"https://example.com/products/electronics/laptops\";\n$path = parse_url($url, PHP_URL_PATH);  // /products/electronics/laptops\n\n$segments = array_filter(explode(\"/\", $path));\necho \"Path segments: \" . implode(\" > \", $segments) . \"\\n\";\n\n// Get depth\necho \"Depth: \" . count($segments) . \" levels\\n\";\n\n// Access specific segment\necho \"Category: \" . ($segments[0] ?? \"N/A\") . \"\\n\";\necho \"Subcategory: \" . ($segments[1] ?? \"N/A\") . \"\\n\";`, expl: "<strong>📍 URL Segments:</strong> Use <code>parse_url()</code> to extract path, then explode by '/'. Filter empty strings with array_filter(). Access breadcrumb navigation." },
+                  { title: "⏰ Date/Time Parsing", code: `<?php\n$dateString = \"2024-01-15 14:30:45\";\n\n// Split date and time\nlist($date, $time) = explode(\" \", $dateString);\necho \"Date: $date\\n\";\necho \"Time: $time\\n\";\n\n// Split date components\n$dateParts = explode(\"-\", $date);\n$year = $dateParts[0];\n$month = $dateParts[1];\n$day = $dateParts[2];\necho \"Formatted: $day/$month/$year\\n\";\n\n// Split time components  \nlist($hour, $min, $sec) = explode(\":\", $time);\necho \"Hour: $hour, Minute: $min, Second: $sec\\n\";`, expl: "<strong>⏰ Date Parsing:</strong> explode() on space and dash to extract components. Use list() for unpacking. Common pattern for datetime formatting and timezone conversion." },
+                  { title: "🔐 Email Domain Extraction", code: `<?php\nfunction extractEmailInfo(string $email): array {\n  list($username, $domain) = explode(\"@\", $email, 2);\n  list($domainName, $tld) = explode(\".\", $domain, 2);\n  \n  return [\n    'email' => $email,\n    'username' => $username,\n    'domain' => $domain,\n    'domainName' => $domainName,\n    'tld' => $tld\n  ];\n}\n\n$info = extractEmailInfo(\"john.doe@subdomain.example.co.uk\");\necho json_encode($info, JSON_PRETTY_PRINT);`, expl: "<strong>📧 Email Parsing:</strong> Use limit parameter <code>explode('@', email, 2)</code> to split into username + domain. Split domain by last dot for TLD. Show how limit parameter prevents over-splitting." }
+                ]
+              },
+              implode: {
+                idx: 0, items: [
+                  { title: "🔗 Join Array to CSV", code: `<?php\n$items = [\"apple\",\"banana\",\"cherry\",\"date\"];\necho \"Array: \" . json_encode($items) . \"\\n\";\n\n// Join with comma\n$csv = implode(\",\", $items);\necho \"CSV: $csv\\n\";\n\n// Join with different separator\n$pipe = implode(\" | \", $items);\necho \"Pipe: $pipe\\n\";\n\n// Join with newline (one per line)\n$lines = implode(\"\\n\", $items);\necho \"Lines:\\n\" . $lines;`, expl: "<strong>🔗 Syntax:</strong> <code>implode(separator, array)</code> joins array elements into string with separator between each. Reverse of explode(). Essential for CSV export, SQL queries, display." },
+                  { title: "🗄️ SQL Query Builder", code: `<?php\n// Build IN clause\n$ids = [1, 5, 12, 18, 22];\n$idList = implode(\",\", $ids);\n$sql = \"SELECT * FROM products WHERE id IN ($idList)\";\necho \"Query: $sql\\n\\n\";\n\n// Multiple conditions\n$names = [\"Alice\",\"Bob\",\"Charlie\"];\n$quotedNames = array_map(fn($n) => \"'$n'\", $names);\n$nameList = implode(\",\", $quotedNames);\n$sql2 = \"SELECT * FROM users WHERE name IN ($nameList)\";\necho \"Query: $sql2\\n\\n\";\n\n// Build UPDATE SET clause\n$updates = [\"name='John'\",\"email='john@test.com'\",\"status='active'\"];\n$setClause = implode(\",\", $updates);\n$sql3 = \"UPDATE users SET $setClause WHERE id=5\";\necho \"Query: $sql3\\n\";`, expl: "<strong>🗄️ SQL Building:</strong> Use implode() to construct SQL queries. Combine with array_map() to quote strings or format values. Essential for dynamic queries (use prepared statements in production!)." },
+                  { title: "🌐 Build URLs & Query Strings", code: `<?php\n$base = \"https://example.com\";\n$segments = [\"products\",\"electronics\",\"laptops\"];\n$url = $base . \"/\" . implode(\"/\", $segments);\necho \"URL: $url\\n\";\n\n// Query string\n$params = [\n  \"category=electronics\",\n  \"price_min=500\",\n  \"price_max=2000\",\n  \"sort=price\"\n];\n$queryString = implode(\"&\", $params);\n$fullUrl = \"$url?$queryString\";\necho \"Full: $fullUrl\\n\";\n\n// Using http_build_query (cleaner)\n$data = [\n  'category' => 'electronics',\n  'price_min' => 500,\n  'sort' => 'price'\n];\n$url2 = $url . \"?\" . http_build_query($data);\necho \"Clean: $url2;\"`, expl: "<strong>🌐 URL Building:</strong> Use implode() to build URL paths and query strings. Combine path segments with '/'. Better: use http_build_query() for proper encoding." },
+                  { title: "📧 Email List from Array", code: `<?php\n$recipients = [\n  \"alice@example.com\",\n  \"bob@test.com\",\n  \"charlie@domain.org\"\n];\n\n// For mail() function\n$to = implode(\",\", $recipients);\necho \"To: $to\\n\";\n\n// Format nicely\n$formatted = implode(\"; \", array_map(\n  fn($email) => \"<$email>\",\n  $recipients\n));\necho \"Formatted: $recipients = $formatted\\n\";\n\n// CC/BCC list\n$cc = [\"manager@company.com\",\"admin@company.com\"];\necho \"CC: \" . implode(\",\", $cc) . \"\\n\";`, expl: "<strong>📧 Email Headers:</strong> Combine multiple emails with separators for email headers. Use array_map() to format each email. Common in PHP mail() functions and API requests." },
+                  { title: "📝 Build HTML from Array", code: `<?php\n// Build HTML list\n$items = [\"Home\",\"About\",\"Services\",\"Contact\"];\n$html = \"<ul>\\n\" . implode(\"\\n\", array_map(\n  fn($item) => \"  <li>$item</li>\",\n  $items\n)) . \"\\n</ul>\";\necho $html . \"\\n\\n\";\n\n// Build CSS classes\n$classes = [\"btn\",\"btn-primary\",\"btn-lg\",\"active\"];\necho \"<button class=\\\"\" . implode(\" \", $classes) . \"\\\">Click me</button>\\n\\n\";\n\n// Build data attributes\n$attrs = [\n  \"data-id=\\\"123\\\"\",\n  \"data-type=\\\"product\\\"\",\n  \"data-active=\\\"true\\\"\"\n];\necho \"<div \" . implode(\" \", $attrs) . \">Content</div>\\n\";`, expl: "<strong>📝 HTML Generation:</strong> Combine array_map() with implode() to build HTML. Maps data to tags, joins with newlines for readability. Practical for template-less HTML generation." }
+                ]
+              },
+              oop2: {
+                idx: 0, items: [
+                  { title: "📝 TextProcessor OOP Class", code: `<?php\nclass TextProcessor {\n  private string $text;\n  \n  public function __construct(string $text) {\n    $this->text = $text;\n  }\n  \n  public function truncate(int $length): static {\n    if (strlen($this->text) > $length) {\n      $this->text = substr($this->text, 0, $length) . \"...\";\n    }\n    return $this;\n  }\n  \n  public function uppercase(): static {\n    $this->text = strtoupper($this->text);\n    return $this;\n  }\n  \n  public function replace(string $search, string $replace): static {\n    $this->text = str_replace($search, $replace, $this->text);\n    return $this;\n  }\n  \n  public function get(): string { return $this->text; }\n}\n\n$text = \"The quick brown fox\";\necho (new TextProcessor($text))\n  ->replace(\"fox\", \"dog\")\n  ->truncate(15)\n  ->uppercase()\n  ->get();  // THE QUICK BROWN...`, expl: "<strong>🏗️ Fluent Interface:</strong> Each method returns <code>$this</code> enabling method chaining. Encapsulates string operations. Private property can't be modified directly - ensures data consistency." },
+                  { title: "🎨 HTML Builder Class", code: `<?php\nclass HtmlBuilder {\n  private string $html = \"\";\n  private string $indent = \"\";\n  \n  public function tag(string $name, ?string $content = null, array $attrs = []): static {\n    $attrStr = \"\";\n    foreach($attrs as $k => $v) $attrStr .= \" $k=\\\"$v\\\"\";\n    \n    if ($content !== null) {\n      $this->html .= \"$this->indent<$name$attrStr>$content</$name>\\n\";\n    } else {\n      $this->html .= \"$this->indent<$name$attrStr>\\n\";\n      $this->indent .= \"  \";\n    }\n    return $this;\n  }\n  \n  public function end(): static {\n    $this->indent = substr($this->indent, 0, -2);\n    $tag = preg_replace('/<(\\w+).*/','$1', trim(explode(\">\", explode(\"<\", $this->html)[1])[0]));\n    $this->html .= \"$this->indent</$tag>\\n\";\n    return $this;\n  }\n  \n  public function text(string $text): static {\n    $this->html .= \"$this->indent$text\\n\";\n    return $this;\n  }\n  \n  public function build(): string { return $this->html; }\n}\n\necho (new HtmlBuilder())\n  ->tag(\"div\", null, [\"class\" => \"container\"])\n  ->tag(\"h1\", \"Hello World\")\n  ->tag(\"p\", \"This is a paragraph\")\n  ->end()\n  ->build();`, expl: "<strong>🎨 DSL Pattern:</strong> Build HTML with fluent chainable methods. Combines string manipulation with OOP. Shows how classes can abstract complex string operations." },
+                  { title: "🔐 Password Hasher & Validator", code: `<?php\nclass PasswordManager {\n  private const MIN_LENGTH = 8;\n  private const MAX_LENGTH = 128;\n  private string $password;\n  private array $rules = [];\n  \n  public function __construct(string $pwd) {\n    $this->password = $pwd;\n    $this->validate();\n  }\n  \n  private function validate(): void {\n    if (strlen($this->password) < self::MIN_LENGTH) {\n      $this->rules[] = \"Too short (min \" . self::MIN_LENGTH . \")\";\n    }\n    if (!preg_match('/[A-Z]/', $this->password)) {\n      $this->rules[] = \"Needs uppercase\";\n    }\n    if (!preg_match('/[0-9]/', $this->password)) {\n      $this->rules[] = \"Needs number\";\n    }\n  }\n  \n  public function isValid(): bool { return count($this->rules) === 0; }\n  public function getErrors(): array { return $this->rules; }\n  public function hash(): string { return password_hash($this->password, PASSWORD_BCRYPT); }\n}\n\n$pwd = new PasswordManager(\"MyPass123\");\necho ($pwd->isValid() ? \"✓ Valid\" : \"✗ Invalid\") . \"\\n\";\nif (!$pwd->isValid()) {\n  echo \"Errors: \" . implode(\", \", $pwd->getErrors());\n}`, expl: "<strong>🔐 Security Pattern:</strong> Encapsulate validation logic in class. Use private const for rules. Combine string functions (strlen, preg_match) with OOP for clean password handling." },
+                  { title: "📊 CSV Parser & Transformer", code: `<?php\nclass CsvParser {\n  private array $headers = [];\n  private array $rows = [];\n  \n  public function __construct(string $csv) {\n    $lines = explode(\"\\n\", trim($csv));\n    if (count($lines) > 0) {\n      $this->headers = explode(\",\", array_shift($lines));\n      foreach($lines as $line) {\n        $values = explode(\",\", $line);\n        if (count($values) === count($this->headers)) {\n          $this->rows[] = array_combine($this->headers, array_map('trim', $values));\n        }\n      }\n    }\n  }\n  \n  public function getRows(): array { return $this->rows; }\n  public function count(): int { return count($this->rows); }\n  public function getColumn(string $col): array {\n    return array_column($this->rows, $col);\n  }\n}\n\n$csv = \"name,age,city\\nAlice,30,NYC\\nBob,25,LA\\nCharlie,35,Chicago\";\n$parser = new CsvParser($csv);\necho \"Total rows: \" . $parser->count() . \"\\n\";\necho \"Ages: \" . implode(\", \", $parser->getColumn(\"age\")) . \"\\n\";`, expl: "<strong>📊 Data Processing:</strong> Encapsulate CSV parsing logic. Use explode() to split rows/columns, array_combine() to create associative arrays. Chain string and array functions together." },
+                  { title: "🔤 String Validator with Multiple Rules", code: `<?php\nclass StringValidator {\n  private string $value;\n  private array $errors = [];\n  \n  public function __construct(string $value) {\n    $this->value = $value;\n  }\n  \n  public function minLength(int $min): static {\n    if (strlen($this->value) < $min) {\n      $this->errors[] = \"Minimum $min characters (current: \" . strlen($this->value) . \")\";\n    }\n    return $this;\n  }\n  \n  public function maxLength(int $max): static {\n    if (strlen($this->value) > $max) {\n      $this->errors[] = \"Maximum $max characters (current: \" . strlen($this->value) . \")\";\n    }\n    return $this;\n  }\n  \n  public function containsNumber(): static {\n    if (!preg_match('/[0-9]/', $this->value)) {\n      $this->errors[] = \"Must contain a number\";\n    }\n    return $this;\n  }\n  \n  public function isValid(): bool { return count($this->errors) === 0; }\n  public function getErrors(): array { return $this->errors; }\n}\n\n$validator = new StringValidator(\"Test123\");\nif ($validator->minLength(5)->maxLength(20)->containsNumber()->isValid()) {\n  echo \"✓ All validations passed\";\n} else {\n  echo \"Errors: \" . implode(\", \", $validator->getErrors());\n}`, expl: "<strong>✔️ Builder Pattern:</strong> Chain validation methods. Each method returns <code>$this</code> for fluent interface. Combine string checks (strlen, preg_match) with OOP design." }
+                ]
+              },
+            };
+
+            function nextEx(key, taIds, outIds) {
+              const ex = exExamples[key];
+              if (!ex) return;
+              ex.idx = (ex.idx + 1) % ex.items.length;
+              const item = ex.items[ex.idx];
+              const titleEl = document.getElementById("et-" + key);
+              if (titleEl) titleEl.textContent = item.title;
+              taIds.forEach(id => { const ta = document.getElementById(id); if (ta) ta.value = item.code; });
+              outIds.forEach(id => {
+                const out = document.getElementById(id);
+                if (out) { out.className = "op-content wait"; out.textContent = "▶ Click 'Run' to execute PHP..."; }
+                const lbl = document.getElementById(id.replace("out-", "ol-"));
+                if (lbl) { lbl.className = "op-label"; lbl.textContent = "Output"; }
+              });
+              const expDiv = document.getElementById("exp-" + key);
+              if (expDiv && item.expl) expDiv.innerHTML = item.expl;
+            }
+
+            // Initialize all explanation divs and textareas with first example
+            document.addEventListener("DOMContentLoaded", () => {
+              for (let k in exExamples) {
+                const expDiv = document.getElementById("exp-" + k);
+                if (expDiv && exExamples[k].items[0]?.expl) expDiv.innerHTML = exExamples[k].items[0].expl;
+                const ta = document.getElementById("ta-" + k);
+                if (ta && exExamples[k].items[0]?.code) ta.value = exExamples[k].items[0].code;
+                const titleEl = document.getElementById("et-" + k);
+                if (titleEl && exExamples[k].items[0]?.title) titleEl.textContent = exExamples[k].items[0].title;
+              }
+            });
+
+            // ========== QUIZ (20+ questions) ==========
+            const quizQuestions = [
+              { q: "What index does the FIRST element of a PHP indexed array have?", opts: ["1", "0", "-1", "null"], answer: 1, feedback: "Zero‑based indexing: first element at index 0." },
+              { q: "What does this code output? <code>$arr = ['a','b','c','d']; echo count($arr);</code>", opts: ["3", "4", "5", "Error"], answer: 1, feedback: "count() returns 4 elements." },
+              { q: "Which function splits a string into an array by a delimiter?", opts: ["implode()", "split_string()", "explode()", "str_split_by()"], answer: 2, feedback: "explode(delimiter, string) splits a string into an array." },
+              { q: "What does strpos() return when the needle is NOT found?", opts: ["-1", "0", "null", "false"], answer: 3, feedback: "strpos() returns false. Use !== false to check." },
+              { q: "What does strlen('Hello World') return?", opts: ["10", "11", "12", "Error"], answer: 1, feedback: "11 characters (space counts)." },
+              { q: "How to access associative array value with key 'name'?", opts: ["$user[0]", "$user('name')", "$user['name']", "$user->name"], answer: 2, feedback: "Square brackets with quotes." },
+              { q: "substr('Hello World',6) returns?", opts: ["Hello", "World", "ello ", "orld"], answer: 1, feedback: "Starts at index 6 = 'World'." },
+              { q: "array_pop() does what?", opts: ["removes first", "removes last", "adds to end", "sorts"], answer: 1, feedback: "Removes and returns last element." },
+              { q: "str_replace('PHP','Python','I love PHP') returns?", opts: ["I love PHP", "I love Python", "I love", "Python love PHP"], answer: 1, feedback: "Replaces all occurrences." },
+              { q: "Returning $this from a method enables what?", opts: ["Inheritance", "Method chaining", "Polymorphism", "Encapsulation"], answer: 1, feedback: "Fluent interface (method chaining)." },
+              { q: "Which function returns all keys of an associative array?", opts: ["array_values()", "array_keys()", "get_keys()", "array_index()"], answer: 1, feedback: "array_keys() returns the keys." },
+              { q: "explode(',','php,web,oop')[1] outputs?", opts: ["php", "web", "oop", "array"], answer: 1, feedback: "Index 1 is 'web'." },
+              { q: "What does array_filter() do?", opts: ["Sorts array", "Keeps matching elements", "Deletes duplicates", "Merges arrays"], answer: 1, feedback: "array_filter() returns new array with elements where callback returns true." },
+              { q: "array_map() applies a function to which?", opts: ["First element only", "Last element only", "Each element", "Nothing - just joins"], answer: 2, feedback: "array_map(callback, array) applies callback to EACH element." },
+              { q: "What does array_sum([10,20,30]) return?", opts: ["60", "3", "30", "10,20,30"], answer: 0, feedback: "Adds all elements: 10+20+30=60." },
+              { q: "strrpos() vs strpos() - what's different?", opts: ["strrpos returns boolean", "strrpos finds last occurrence", "No difference", "strrpos is case-insensitive"], answer: 1, feedback: "strpos() finds first, strrpos() finds LAST occurrence." },
+              { q: "Private arrays in OOP classes are protected from?", opts: ["Reading", "Direct modification outside class", "Methods", "Inheritance"], answer: 1, feedback: "private properties can only be accessed within the class." },
+              { q: "array_column($data,'id') extracts which?", opts: ["All rows", "Specific column from 2D array", "Single value", "Array keys"], answer: 1, feedback: "Extracts 'id' column from each row in 2D array." },
+              { q: "What does array_reverse() do?", opts: ["Reverses keys only", "Flips entire array order", "Removes duplicates", "Sorts descending"], answer: 1, feedback: "Flips array order - first becomes last." },
+              { q: "How many parameters does substr() take?", opts: ["1 (required)", "2 (required)", "3 (1 required, 2 optional)", "Unlimited"], answer: 2, feedback: "substr(string, start, length) - only string is required." },
+              { q: "What's the difference between asort() and arsort()?", opts: ["No difference", "asort ascending/arsort descending (keep keys)", "asort sorts numbers only", "arsort removes duplicates"], answer: 1, feedback: "Both keep keys - asort ascending, arsort descending." },
+              { q: "Which is faster for large arrays?", opts: ["foreach", "array_map()", "array_filter()", "All same speed"], answer: 3, feedback: "Modern PHP optimizes these similarly. Choose based on readability." },
+              { q: "What does in_array('needle', $haystack) return?", opts: ["Position", "true/false", "1 or 0", "Index number"], answer: 1, feedback: "Returns boolean: true if found, false if not." }
+            ];
+            let qCurrent = 0, qScore = 0, qAnswered = false;
+            function renderQuestion() {
+              const q = quizQuestions[qCurrent];
+              const area = document.getElementById("quizArea");
+              const results = document.getElementById("quizResults");
+              results.style.display = "none";
+              area.style.display = "block";
+              document.getElementById("qCurr").textContent = qCurrent + 1;
+              document.getElementById("qTotal").textContent = quizQuestions.length;
+              document.getElementById("qProgFill").style.width = ((qCurrent + 1) / quizQuestions.length * 100) + "%";
+              const labels = ["A", "B", "C", "D"];
+              area.innerHTML = `<div class="q-card"><div class="q-num">Question ${qCurrent + 1}</div><div class="q-text">${q.q}</div><ul class="opts">${q.opts.map((o, i) => `<button class="opt" onclick="answerQ(${i})"><span class="opt-l">${labels[i]}</span>${o}</button>`).join("")}</ul><div class="fb" id="qFeedback"></div></div><div class="q-nav"><span class="q-score">Score: ${qScore}/${quizQuestions.length}</span><button class="nav-btn primary" id="qNextBtn" onclick="nextQuestion()" style="display:none">Next →</button></div>`;
+              qAnswered = false;
+            }
+            function answerQ(chosen) {
+              if (qAnswered) return;
+              qAnswered = true;
+              const q = quizQuestions[qCurrent];
+              const fb = document.getElementById("qFeedback");
+              const nextBtn = document.getElementById("qNextBtn");
+              const opts = document.querySelectorAll(".opt");
+              opts.forEach(b => b.disabled = true);
+              if (chosen === q.answer) { qScore++; opts[chosen].classList.add("correct"); fb.className = "fb ok"; fb.textContent = "✓ Correct! " + q.feedback; }
+              else { opts[chosen].classList.add("wrong"); opts[q.answer].classList.add("show-correct"); fb.className = "fb fail"; fb.textContent = "✗ Incorrect. " + q.feedback; }
+              if (qCurrent < quizQuestions.length - 1) nextBtn.style.display = "inline-flex";
+              else nextBtn.style.display = "inline-flex";
+            }
+            function nextQuestion() { if (qCurrent < quizQuestions.length - 1) { qCurrent++; renderQuestion(); } else showResults(); }
+            function showResults() {
+              const area = document.getElementById("quizArea");
+              const results = document.getElementById("quizResults");
+              area.style.display = "none";
+              results.style.display = "block";
+              const pct = Math.round(qScore / quizQuestions.length * 100);
+              document.getElementById("resScore").innerHTML = `${qScore}/${quizQuestions.length}`;
+              document.getElementById("rs-correct").innerHTML = qScore;
+              document.getElementById("rs-wrong").innerHTML = quizQuestions.length - qScore;
+              document.getElementById("rs-pct").innerHTML = pct + "%";
+            }
+            function restartQuiz() { qCurrent = 0; qScore = 0; qAnswered = false; document.getElementById("quizResults").style.display = "none"; renderQuestion(); }
+            window.renderQuestion = renderQuestion; window.answerQ = answerQ; window.nextQuestion = nextQuestion; window.restartQuiz = restartQuiz;
+          </script>
+</body>
+
+</html>

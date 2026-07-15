@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>PHP Mastery — Modules 7 & 8</title>
+   <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet">
+   <link rel="stylesheet" href="style.css">
+   <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+</head>
+
+<body>
+   <div class="prog-bar">
+      <div class="prog-fill" id="gProg" style="width:5%"></div>
+   </div>
+   <div class="hdr">
+      <div class="logo">
+         <div class="logo-box">PHP</div><span class="logo-name">PHP Mastery Course</span>
+      </div>
+      <div class="hdr-right"><span class="badge badge-m7" id="hdrBadge">MODULE 7</span><span class="slide-num"
+            id="slideNum">1 / 20</span></div>
+   </div>
+   <div class="viewport" id="vp">
+
+      <!-- SLIDE 1: COVER -->
+      <div class="slide active" id="s1">
+         <div class="cover">
+            <div class="cover-tag">PHP Mastery · Interactive Course</div>
+            <div class="cover-title">ARRAYS &amp; STRINGS</div>
+            <div class="cover-sub">Modules 7 &amp; 8 · Live Code Execution · OOP · Quiz · Expanded Examples</div>
+            <div class="cover-cards">
+               <div class="cover-card m7">
+                  <div class="cc-mod">Module 7</div>
+                  <div class="cc-name">PHP Arrays</div>
+                  <div class="cc-topics">▸ Indexed Arrays<br>▸ Associative Arrays<br>▸ Multidimensional Arrays<br>▸
+                     Common Array Functions<br>▸ OOP with Arrays</div>
+               </div>
+               <div class="cover-card m8">
+                  <div class="cc-mod">Module 8</div>
+                  <div class="cc-name">String Functions</div>
+                  <div class="cc-topics">▸ strlen()<br>▸ strpos() / stripos()<br>▸ substr()<br>▸ str_replace()<br>▸
+                     explode() / implode()</div>
+               </div>
+            </div>
+            <div class="cover-stats">
+               <div class="cs">
+                  <div class="cs-n">20</div>
+                  <div class="cs-l">Slides</div>
+               </div>
+               <div class="cs">
+                  <div class="cs-n">150+</div>
+                  <div class="cs-l">Code Examples</div>
+               </div>
+               <div class="cs">
+                  <div class="cs-n">25</div>
+                  <div class="cs-l">Quiz Questions</div>
+               </div>
+               <div class="cs">
+                  <div class="cs-n">7+</div>
+                  <div class="cs-l">OOP Examples</div>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <!-- SLIDE 2: MODULE 7 OVERVIEW -->
+      <div class="slide" id="s2">
+         <div class="content">
+            <div class="sh">
+               <div>
+                  <div class="st">MODULE 7 — <span>ARRAYS</span></div>
+                  <div class="sd">Collections of data — the backbone of PHP applications</div>
+               </div><span class="badge badge-m7">MODULE 7</span>
+            </div>
+            <div class="info"><strong>What is an Array?</strong> An array is a special variable that holds multiple
+               values under one name.</div>
+            <div class="info" style="margin-top:10px">💡 <strong>Why arrays?</strong> They allow you to group related
+               data, iterate over collections, and build complex data structures. Without arrays, web apps would be much
+               harder to manage.</div>
+            <div class="ov-grid">
+               <div class="ov-card">
+                  <div class="ov-icon">📋</div>
+                  <div class="ov-title">Indexed Arrays</div>
+                  <div class="ov-desc">Numeric indexes starting at 0.</div>
+               </div>
+               <div class="ov-card">
+                  <div class="ov-icon">🗂️</div>
+                  <div class="ov-title">Associative Arrays</div>
+                  <div class="ov-desc">Named string keys.</div>
+               </div>
+               <div class="ov-card">
+                  <div class="ov-icon">🏗️</div>
+                  <div class="ov-title">Multidimensional</div>
+                  <div class="ov-desc">Arrays within arrays.</div>
+               </div>
+               <div class="ov-card">
+                  <div class="ov-icon">🔧</div>
+                  <div class="ov-title">Array Functions</div>
+                  <div class="ov-desc">sort, search, merge, filter…</div>
+               </div>
+               <div class="ov-card">
+                  <div class="ov-icon">🎯</div>
+                  <div class="ov-title">OOP + Arrays</div>
+                  <div class="ov-desc">Using arrays in classes.</div>
+               </div>
+            </div>
+            <hr class="div">
+            <div class="two-col">
+               <div class="cc">
+                  <h3>Creating Arrays — 3 Ways</h3>
+                  <div class="syn">$arr = [1,2,3];<br>$arr = array(1,2,3);<br>$arr = []; $arr[] = "first";</div>
+               </div>
+               <div class="cc">
+                  <h3>Key Facts</h3>
+                  <ul class="slist">
+                     <li>Hold any data type</li>
+                     <li>Indexed start at 0</li>
+                     <li>Dynamic size</li>
+                     <li>Use print_r() to debug</li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <!-- SLIDE 3: INDEXED ARRAYS -->
+      <div class="slide" id="s3">
+         <div class="content">
+            <div class="sh">
+               <div>
+                  <div class="st"><span>INDEXED</span> ARRAYS</div>
+                  <div class="sd">Ordered lists with numeric keys starting at 0</div>
+               </div><span class="badge badge-m7">MODULE 7</span>
+            </div>
+            <div class="two-col">
+               <div>
+                  <div class="cc">
+                     <h3>Syntax</h3>
+                     <div class="syn">$fruits = ["Apple","Banana","Cherry"];<br>echo $fruits[0]; // Apple<br>$fruits[] =
+                        "Date"; // Append</div>
+                  </div>
+               </div>
+               <div>
+                  <div class="cc">
+                     <h3>Common Operations</h3>
+                     <ul class="slist">
+                        <li>count($arr)</li>
+                        <li>$arr[] = val</li>
+                        <li>sort($arr)</li>
+                        <li>in_array(val, $arr)</li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+            <div class="lab">
+               <div class="editor-panel">
+                  <div class="ep-top">
+                     <div class="ep-file">indexed_arrays.php</div>
+                     <div class="ep-btns"><button class="btn-run"
+                           onclick="runCode('ta-indexed','out-indexed','ol-indexed')">▶ Run</button><button
+                           class="btn-next" onclick="nextEx('indexed',['ta-indexed'],['out-indexed','ol-indexed'])">🔄
+                           Next Example</button></div>
+                  </div>
+                  <div class="ex-title" id="et-indexed">Example 1: Student Grades Management</div><textarea
+                     class="code-ta" id="ta-indexed" spellcheck="false"></textarea>
+               </div>
+               <div class="op">
+                  <div class="op-top">
+                     <div class="op-label" id="ol-indexed">Output</div>
+                  </div>
+                  <div class="op-content wait" id="out-indexed">▶ Click "Run" to execute PHP...</div>
+               </div>
+            </div>
+            <div class="explanation" id="exp-indexed"></div>
+         </div>
+      </div>
+
+      <!-- SLIDE 4: ASSOCIATIVE ARRAYS -->
+      <div class="slide" id="s4">
+         <div class="content">
+            <div class="sh">
+               <div>
+                  <div class="st"><span>ASSOCIATIVE</span> ARRAYS</div>
+                  <div class="sd">Key-value pairs — like a dictionary</div>
+               </div><span class="badge badge-m7">MODULE 7</span>
+            </div>
+            <div class="two-col">
+               <div>
+                  <div class="cc">
+                     <h3>Syntax</h3>
+                     <div class="syn">$student = ["name"=>"Alice","age"=>20];<br>echo $student["name"];</div>
+                  </div>
+               </div>
+               <div>
+                  <div class="cc">
+                     <h3>Key Functions</h3>
+                     <ul class="slist">
+                        <li>array_keys($arr)</li>
+                        <li>array_values($arr)</li>
+                        <li>ksort($arr)</li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+            <div class="lab">
+               <div class="editor-panel">
+                  <div class="ep-top">
+                     <div class="ep-file">associative_arrays.php</div>
+                     <div class="ep-btns"><button class="btn-run" onclick="runCode('ta-assoc','out-assoc','ol-assoc')">▶
+                           Run</button><button class="btn-next"
+                           onclick="nextEx('assoc',['ta-assoc'],['out-assoc','ol-assoc'])">🔄 Next Example</button>
+                     </div>
+                  </div>
+                  <div class="ex-title" id="et-assoc">Example 1: Student Profile</div><textarea class="code-ta"
+                     id="ta-assoc" spellcheck="false"></textarea>
+               </div>
+               <div class="op">
+                  <div class="op-top">
+                     <div class="op-label" id="ol-assoc">Output</div>
+                  </div>
+                  <div class="op-content wait" id="out-assoc">▶ Click "Run" to execute PHP...</div>
+               </div>
+            </div>
+            <div class="explanation" id="exp-assoc"></div>
+         </div>
+      </div>
+
+      <!-- SLIDE 5: MULTIDIMENSIONAL ARRAYS -->
+      <div class="slide" id="s5">
+         <div class="content">
+            <div class="sh">
+               <div>
+                  <div class="st"><span>MULTIDIMENSIONAL</span> ARRAYS</div>
+                  <div class="sd">Arrays inside arrays — tables, grids, and beyond</div>
+               </div><span class="badge badge-m7">MODULE 7</span>
+            </div>
+            <div class="two-col">
+               <div>
+                  <div class="cc">
+                     <h3>2D Array</h3>
+                     <div class="syn">$classroom = [["Alice",92],["Bob",78]];<br>echo $classroom[0][0]; // Alice</div>
+                  </div>
+               </div>
+               <div>
+                  <div class="cc">
+                     <h3>array_column()</h3>
+                     <div class="syn">$grades = array_column($classroom,1);</div>
+                  </div>
+               </div>
+            </div>
+            <div class="lab">
+               <div class="editor-panel">
+                  <div class="ep-top">
+                     <div class="ep-file">multidimensional.php</div>
+                     <div class="ep-btns"><button class="btn-run" onclick="runCode('ta-multi','out-multi','ol-multi')">▶
+                           Run</button><button class="btn-next"
+                           onclick="nextEx('multi',['ta-multi'],['out-multi','ol-multi'])">🔄 Next Example</button>
+                     </div>
+                  </div>
+                  <div class="ex-title" id="et-multi">Example 1: Class Roster with Grades</div><textarea class="code-ta"
+                     id="ta-multi" spellcheck="false"></textarea>
+               </div>
+               <div class="op">
+                  <div class="op-top">
+                     <div class="op-label" id="ol-multi">Output</div>
+                  </div>
+                  <div class="op-content wait" id="out-multi">▶ Click "Run" to execute PHP...</div>
+               </div>
+            </div>
+            <div class="explanation" id="exp-multi"></div>
+         </div>
+      </div>
+
+      <!-- SLIDE 6: ARRAY FUNCTIONS PART 1 -->
+      <div class="slide" id="s6">
+         <div class="content">
+            <div class="sh">
+               <div>
+                  <div class="st">ARRAY <span>FUNCTIONS</span> — PART 1</div>
+                  <div class="sd">Adding, removing, sorting, counting</div>
+               </div><span class="badge badge-m7">MODULE 7</span>
+            </div>
+            <div class="three-col">
+               <div class="cc">
+                  <h3>Add / Remove</h3>
+                  <ul>
+                     <li>array_push()</li>
+                     <li>array_pop()</li>
+                     <li>array_shift()</li>
+                  </ul>
+               </div>
+               <div class="cc">
+                  <h3>Sorting</h3>
+                  <ul>
+                     <li>sort() / rsort()</li>
+                     <li>asort() / ksort()</li>
+                  </ul>
+               </div>
+               <div class="cc">
+                  <h3>Info</h3>
+                  <ul>
+                     <li>count()</li>
+                     <li>max() / min()</li>
+                     <li>array_sum()</li>
+                  </ul>
+               </div>
+            </div>
+            <div class="lab">
+               <div class="editor-panel">
+                  <div class="ep-top">
+                     <div class="ep-file">array_functions_1.php</div>
+                     <div class="ep-btns"><button class="btn-run" onclick="runCode('ta-af1','out-af1','ol-af1')">▶
+                           Run</button><button class="btn-next"
+                           onclick="nextEx('af1',['ta-af1'],['out-af1','ol-af1'])">🔄 Next Example</button></div>
+                  </div>
+                  <div class="ex-title" id="et-af1">Example 1: Stack & Queue Operations</div><textarea class="code-ta"
+                     id="ta-af1" spellcheck="false"></textarea>
+               </div>
+               <div class="op">
+                  <div class="op-top">
+                     <div class="op-label" id="ol-af1">Output</div>
+                  </div>
+                  <div class="op-content wait" id="out-af1">▶ Click "Run" to execute PHP...</div>
+               </div>
+            </div>
+            <div class="explanation" id="exp-af1"></div>
+         </div>
+      </div>
+
+      <!-- SLIDE 7: ARRAY FUNCTIONS PART 2 -->
+      <div class="slide" id="s7">
+         <div class="content">
+            <div class="sh">
+               <div>
+                  <div class="st">ARRAY <span>FUNCTIONS</span> — PART 2</div>
+                  <div class="sd">Search, filter, map, reduce</div>
+               </div><span class="badge badge-m7">MODULE 7</span>
+            </div>
+            <div class="three-col">
+               <div class="cc">
+                  <h3>Search</h3>
+                  <ul>
+                     <li>in_array()</li>
+                     <li>array_search()</li>
+                  </ul>
+               </div>
+               <div class="cc">
+                  <h3>Transform</h3>
+                  <ul>
+                     <li>array_map()</li>
+                     <li>array_filter()</li>
+                     <li>array_reduce()</li>
+                  </ul>
+               </div>
+               <div class="cc">
+                  <h3>Merge & Slice</h3>
+                  <ul>
+                     <li>array_merge()</li>
+                     <li>array_slice()</li>
+                  </ul>
+               </div>
+            </div>
+            <div class="lab">
+               <div class="editor-panel">
+                  <div class="ep-top">
+                     <div class="ep-file">array_functions_2.php</div>
+                     <div class="ep-btns"><button class="btn-run" onclick="runCode('ta-af2','out-af2','ol-af2')">▶
+                           Run</button><button class="btn-next"
+                           onclick="nextEx('af2',['ta-af2'],['out-af2','ol-af2'])">🔄 Next Example</button></div>
+                  </div>
+                  <div class="ex-title" id="et-af2">Example 1: Search, Filter & Transform</div><textarea class="code-ta"
+                     id="ta-af2" spellcheck="false"></textarea>
+               </div>
+               <div class="op">
+                  <div class="op-top">
+                     <div class="op-label" id="ol-af2">Output</div>
+                  </div>
+                  <div class="op-content wait" id="out-af2">▶ Click "Run" to execute PHP...</div>
+               </div>
+            </div>
+            <div class="explanation" id="exp-af2"></div>
+         </div>
+      </div>
+
+      <!-- SLIDE 8: OOP WITH ARRAYS -->
+      <div class="slide" id="s8">
+         <div class="content">
+            <div class="sh">
+               <div>
+                  <div class="oop-badge">⚙️ OOP</div>
+                  <div class="st">ARRAYS IN <span>CLASSES</span></div>
+                  <div class="sd">Object-Oriented Programming with arrays</div>
+               </div><span class="badge badge-oop">OOP</span>
+            </div>
+            <div class="two-col">
+               <div class="cc">
+                  <h3>Benefits</h3>
+                  <ul>
+                     <li>Encapsulation</li>
+                     <li>Validation</li>
+                     <li>Fluent interface</li>
+                  </ul>
+               </div>
+               <div class="cc">
+                  <h3>Example</h3>
+                  <div class="syn">class Cart { private array $items = []; }</div>
+               </div>
+            </div>
+            <div class="lab">
+               <div class="editor-panel">
+                  <div class="ep-top">
+                     <div class="ep-file">ShoppingCart.php</div>
+                     <div class="ep-btns"><button class="btn-run" onclick="runCode('ta-oop1','out-oop1','ol-oop1')">▶
+                           Run</button><button class="btn-next"
+                           onclick="nextEx('oop1',['ta-oop1'],['out-oop1','ol-oop1'])">🔄 Next Example</button></div>
+                  </div>
+                  <div class="ex-title" id="et-oop1">Example 1: ShoppingCart OOP Class</div><textarea class="code-ta"
+                     id="ta-oop1" spellcheck="false" style="min-height:280px"></textarea>
+               </div>
+               <div class="op">
+                  <div class="op-top">
+                     <div class="op-label" id="ol-oop1">Output</div>
+                  </div>
+                  <div class="op-content wait" id="out-oop1">▶ Click "Run" to execute PHP...</div>
+               </div>
+            </div>
+            <div class="explanation" id="exp-oop1"></div>
+         </div>
+      </div>
+
+      <!-- SLIDE 9: MODULE 8 OVERVIEW -->
+      <div class="slide" id="s9">
+         <div class="content">
+            <div class="sh">
+               <div>
+                  <div class="st">MODULE 8 — <span>STRING FUNCTIONS</span></div>
+                  <div class="sd">Manipulate text with built-in functions</div>
+               </div><span class="badge badge-m8">MODULE 8</span>
+            </div>
+            <div class="info"><strong>What are String Functions?</strong> PHP has 100+ built-in string functions. Module
+               8 covers the 6 most essential ones, with extra examples.</div>
+            <div class="ov-grid">
+               <div class="ov-card">
+                  <div class="ov-icon">📏</div>
+                  <div class="ov-title">strlen()</div>
+                  <div class="ov-desc">Get string length</div>
+               </div>
+               <div class="ov-card">
+                  <div class="ov-icon">🔍</div>
+                  <div class="ov-title">strpos()</div>
+                  <div class="ov-desc">Find substring position</div>
+               </div>
+               <div class="ov-card">
+                  <div class="ov-icon">✂️</div>
+                  <div class="ov-title">substr()</div>
+                  <div class="ov-desc">Extract portion</div>
+               </div>
+               <div class="ov-card">
+                  <div class="ov-icon">🔄</div>
+                  <div class="ov-title">str_replace()</div>
+                  <div class="ov-desc">Replace text</div>
+               </div>
+               <div class="ov-card">
+                  <div class="ov-icon">💥</div>
+                  <div class="ov-title">explode()</div>
+                  <div class="ov-desc">String to array</div>
+               </div>
+               <div class="ov-card">
+                  <div class="ov-icon">🔗</div>
+                  <div class="ov-title">implode()</div>
+                  <div class="ov-desc">Array to string</div>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <!-- SLIDE 10: strlen() -->
+      <div class="slide" id="s10">
+         <div class="content">
+            <div class="sh">
+               <div>
+                  <div class="st"><span>strlen()</span> — String Length</div>
+                  <div class="sd">Count characters</div>
+               </div><span class="badge badge-m8">MODULE 8</span>
+            </div>
+            <div class="two-col">
+               <div>
+                  <div class="cc">
+                     <h3>Syntax</h3>
+                     <div class="syn">strlen(string $string): int</div>
+                  </div>
+               </div>
+               <div>
+                  <div class="cc">
+                     <h3>Use cases</h3>
+                     <ul>
+                        <li>Password validation</li>
+                        <li>Truncating text</li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+            <div class="lab">
+               <div class="editor-panel">
+                  <div class="ep-top">
+                     <div class="ep-file">strlen_demo.php</div>
+                     <div class="ep-btns"><button class="btn-run"
+                           onclick="runCode('ta-strlen','out-strlen','ol-strlen')">▶ Run</button><button
+                           class="btn-next" onclick="nextEx('strlen',['ta-strlen'],['out-strlen','ol-strlen'])">🔄 Next
+                           Example</button></div>
+                  </div>
+                  <div class="ex-title" id="et-strlen">Example 1: Password Validator</div><textarea class="code-ta"
+                     id="ta-strlen" spellcheck="false"></textarea>
+               </div>
+               <div class="op">
+                  <div class="op-top">
+                     <div class="op-label" id="ol-strlen">Output</div>
+                  </div>
+                  <div class="op-content wait" id="out-strlen">▶ Click "Run" to execute PHP...</div>
+               </div>
+            </div>
+            <div class="explanation" id="exp-strlen"></div>
+         </div>
+      </div>
+
+      <!-- SLIDE 11: strpos() -->
+      <div class="slide" id="s11">
+         <div class="content">
+            <div class="sh">
+               <div>
+                  <div class="st"><span>strpos()</span> — Find Position</div>
+                  <div class="sd">Locate substring</div>
+               </div><span class="badge badge-m8">MODULE 8</span>
+            </div>
+            <div class="two-col">
+               <div>
+                  <div class="cc">
+                     <h3>Important!</h3>
+                     <div class="warn">Always use <code>!== false</code> because index 0 is valid.</div>
+                  </div>
+               </div>
+               <div>
+                  <div class="cc">
+                     <h3>PHP 8 alternatives</h3>
+                     <ul>
+                        <li>str_contains()</li>
+                        <li>str_starts_with()</li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+            <div class="lab">
+               <div class="editor-panel">
+                  <div class="ep-top">
+                     <div class="ep-file">strpos_demo.php</div>
+                     <div class="ep-btns"><button class="btn-run"
+                           onclick="runCode('ta-strpos','out-strpos','ol-strpos')">▶ Run</button><button
+                           class="btn-next" onclick="nextEx('strpos',['ta-strpos'],['out-strpos','ol-strpos'])">🔄 Next
+                           Example</button></div>
+                  </div>
+                  <div class="ex-title" id="et-strpos">Example 1: Search & Email Validation</div><textarea
+                     class="code-ta" id="ta-strpos" spellcheck="false"></textarea>
+               </div>
+               <div class="op">
+                  <div class="op-top">
+                     <div class="op-label" id="ol-strpos">Output</div>
+                  </div>
+                  <div class="op-content wait" id="out-strpos">▶ Click "Run" to execute PHP...</div>
+               </div>
+            </div>
+            <div class="explanation" id="exp-strpos"></div>
+         </div>
+      </div>
+
+      <!-- SLIDE 12: substr() -->
+      <div class="slide" id="s12">
+         <div class="content">
+            <div class="sh">
+               <div>
+                  <div class="st"><span>substr()</span> — Extract Substring</div>
+                  <div class="sd">Slice a string</div>
+               </div><span class="badge badge-m8">MODULE 8</span>
+            </div>
+            <div class="two-col">
+               <div>
+                  <div class="cc">
+                     <h3>Parameters</h3>
+                     <div class="syn">substr($string, $offset, $length)</div>
+                  </div>
+               </div>
+               <div>
+                  <div class="cc">
+                     <h3>Examples</h3>
+                     <div class="syn">substr("Hello",1,3) → "ell"</div>
+                  </div>
+               </div>
+            </div>
+            <div class="lab">
+               <div class="editor-panel">
+                  <div class="ep-top">
+                     <div class="ep-file">substr_demo.php</div>
+                     <div class="ep-btns"><button class="btn-run"
+                           onclick="runCode('ta-substr','out-substr','ol-substr')">▶ Run</button><button
+                           class="btn-next" onclick="nextEx('substr',['ta-substr'],['out-substr','ol-substr'])">🔄 Next
+                           Example</button></div>
+                  </div>
+                  <div class="ex-title" id="et-substr">Example 1: Text Truncation & URL Parsing</div><textarea
+                     class="code-ta" id="ta-substr" spellcheck="false"></textarea>
+               </div>
+               <div class="op">
+                  <div class="op-top">
+                     <div class="op-label" id="ol-substr">Output</div>
+                  </div>
+                  <div class="op-content wait" id="out-substr">▶ Click "Run" to execute PHP...</div>
+               </div>
+            </div>
+            <div class="explanation" id="exp-substr"></div>
+         </div>
+      </div>
+
+      <!-- SLIDE 13: str_replace() -->
+      <div class="slide" id="s13">
+         <div class="content">
+            <div class="sh">
+               <div>
+                  <div class="st"><span>str_replace()</span> — Replace</div>
+                  <div class="sd">Find and replace text</div>
+               </div><span class="badge badge-m8">MODULE 8</span>
+            </div>
+            <div class="two-col">
+               <div>
+                  <div class="cc">
+                     <h3>Syntax</h3>
+                     <div class="syn">str_replace($search, $replace, $subject)</div>
+                  </div>
+               </div>
+               <div>
+                  <div class="cc">
+                     <h3>Multiple replacements</h3>
+                     <div class="syn">str_replace(["a","b"],["x","y"],$str)</div>
+                  </div>
+               </div>
+            </div>
+            <div class="lab">
+               <div class="editor-panel">
+                  <div class="ep-top">
+                     <div class="ep-file">str_replace_demo.php</div>
+                     <div class="ep-btns"><button class="btn-run"
+                           onclick="runCode('ta-strreplace','out-strreplace','ol-strreplace')">▶ Run</button><button
+                           class="btn-next"
+                           onclick="nextEx('strreplace',['ta-strreplace'],['out-strreplace','ol-strreplace'])">🔄 Next
+                           Example</button></div>
+                  </div>
+                  <div class="ex-title" id="et-strreplace">Example 1: Template Engine & Text Cleaner</div><textarea
+                     class="code-ta" id="ta-strreplace" spellcheck="false"></textarea>
+               </div>
+               <div class="op">
+                  <div class="op-top">
+                     <div class="op-label" id="ol-strreplace">Output</div>
+                  </div>
+                  <div class="op-content wait" id="out-strreplace">▶ Click "Run" to execute PHP...</div>
+               </div>
+            </div>
+            <div class="explanation" id="exp-strreplace"></div>
+         </div>
+      </div>
+
+      <!-- SLIDE 14: explode() -->
+      <div class="slide" id="s14">
+         <div class="content">
+            <div class="sh">
+               <div>
+                  <div class="st"><span>explode()</span> — Split String</div>
+                  <div class="sd">String to array by delimiter</div>
+               </div><span class="badge badge-m8">MODULE 8</span>
+            </div>
+            <div class="two-col">
+               <div>
+                  <div class="cc">
+                     <h3>Syntax</h3>
+                     <div class="syn">explode($separator, $string)</div>
+                  </div>
+               </div>
+               <div>
+                  <div class="cc">
+                     <h3>Use cases</h3>
+                     <ul>
+                        <li>CSV parsing</li>
+                        <li>Tag splitting</li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+            <div class="lab">
+               <div class="editor-panel">
+                  <div class="ep-top">
+                     <div class="ep-file">explode_demo.php</div>
+                     <div class="ep-btns"><button class="btn-run"
+                           onclick="runCode('ta-explode','out-explode','ol-explode')">▶ Run</button><button
+                           class="btn-next" onclick="nextEx('explode',['ta-explode'],['out-explode','ol-explode'])">🔄
+                           Next Example</button></div>
+                  </div>
+                  <div class="ex-title" id="et-explode">Example 1: CSV Parser & Query String</div><textarea
+                     class="code-ta" id="ta-explode" spellcheck="false"></textarea>
+               </div>
+               <div class="op">
+                  <div class="op-top">
+                     <div class="op-label" id="ol-explode">Output</div>
+                  </div>
+                  <div class="op-content wait" id="out-explode">▶ Click "Run" to execute PHP...</div>
+               </div>
+            </div>
+            <div class="explanation" id="exp-explode"></div>
+         </div>
+      </div>
+
+      <!-- SLIDE 15: implode() -->
+      <div class="slide" id="s15">
+         <div class="content">
+            <div class="sh">
+               <div>
+                  <div class="st"><span>implode()</span> — Join Array</div>
+                  <div class="sd">Array to string with glue</div>
+               </div><span class="badge badge-m8">MODULE 8</span>
+            </div>
+            <div class="two-col">
+               <div>
+                  <div class="cc">
+                     <h3>Syntax</h3>
+                     <div class="syn">implode($separator, $array)</div>
+                  </div>
+               </div>
+               <div>
+                  <div class="cc">
+                     <h3>Examples</h3>
+                     <div class="syn">implode(", ", ["a","b","c"]) → "a, b, c"</div>
+                  </div>
+               </div>
+            </div>
+            <div class="lab">
+               <div class="editor-panel">
+                  <div class="ep-top">
+                     <div class="ep-file">implode_demo.php</div>
+                     <div class="ep-btns"><button class="btn-run"
+                           onclick="runCode('ta-implode','out-implode','ol-implode')">▶ Run</button><button
+                           class="btn-next" onclick="nextEx('implode',['ta-implode'],['out-implode','ol-implode'])">🔄
+                           Next Example</button></div>
+                  </div>
+                  <div class="ex-title" id="et-implode">Example 1: SQL Builder & HTML List</div><textarea
+                     class="code-ta" id="ta-implode" spellcheck="false"></textarea>
+               </div>
+               <div class="op">
+                  <div class="op-top">
+                     <div class="op-label" id="ol-implode">Output</div>
+                  </div>
+                  <div class="op-content wait" id="out-implode">▶ Click "Run" to execute PHP...</div>
+               </div>
+            </div>
+            <div class="explanation" id="exp-implode"></div>
+         </div>
+      </div>
+
+      <!-- SLIDE 16: OOP WITH STRINGS -->
+      <div class="slide" id="s16">
+         <div class="content">
+            <div class="sh">
+               <div>
+                  <div class="oop-badge">⚙️ OOP</div>
+                  <div class="st">STRING <span>UTILITY CLASS</span></div>
+                  <div class="sd">Encapsulating string functions</div>
+               </div><span class="badge badge-oop">OOP</span>
+            </div>
+            <div class="lab">
+               <div class="editor-panel">
+                  <div class="ep-top">
+                     <div class="ep-file">TextProcessor.php</div>
+                     <div class="ep-btns"><button class="btn-run" onclick="runCode('ta-oop2','out-oop2','ol-oop2')">▶
+                           Run</button><button class="btn-next"
+                           onclick="nextEx('oop2',['ta-oop2'],['out-oop2','ol-oop2'])">🔄 Next Example</button></div>
+                  </div>
+                  <div class="ex-title" id="et-oop2">Example 1: TextProcessor OOP Class</div><textarea class="code-ta"
+                     id="ta-oop2" spellcheck="false" style="min-height:280px"></textarea>
+               </div>
+               <div class="op">
+                  <div class="op-top">
+                     <div class="op-label" id="ol-oop2">Output</div>
+                  </div>
+                  <div class="op-content wait" id="out-oop2">▶ Click "Run" to execute PHP...</div>
+               </div>
+            </div>
+            <div class="explanation" id="exp-oop2"></div>
+         </div>
+      </div>
+
+      <!-- SLIDE 17: COMBINED PROJECT (now fully functional) -->
+      <div class="slide" id="s17">
+         <div class="content">
+            <div class="sh">
+               <div>
+                  <div class="st"><span>COMBINED ARRAY + STRING</span> PROJECT</div>
+                  <div class="sd">A mini application using arrays and strings together</div>
+               </div>
+            </div>
+            <div class="lab">
+               <div class="editor-panel">
+                  <div class="ep-top">
+                     <div class="ep-file">combined_project.php</div>
+                     <div class="ep-btns"><button class="btn-run" onclick="runCode('ta-combo','out-combo','ol-combo')">▶
+                           Run</button><button class="btn-next"
+                           onclick="nextEx('combo',['ta-combo'],['out-combo','ol-combo'])">🔄 Next Example</button>
+                     </div>
+                  </div>
+                  <div class="ex-title" id="et-combo">Example 1: Contact Form Processor</div><textarea class="code-ta"
+                     id="ta-combo" spellcheck="false"></textarea>
+               </div>
+               <div class="op">
+                  <div class="op-top">
+                     <div class="op-label" id="ol-combo">Output</div>
+                  </div>
+                  <div class="op-content wait" id="out-combo">▶ Click "Run" to execute PHP...</div>
+               </div>
+            </div>
+            <div class="explanation" id="exp-combo"></div>
+         </div>
+      </div>
+
+      <!-- SLIDE 18: DEEP DIVE – MULTIDIMENSIONAL ARRAYS + LOOPS (now fully functional) -->
+      <div class="slide" id="s18">
+         <div class="content">
+            <div class="sh">
+               <div>
+                  <div class="st">DEEP DIVE: <span>MULTIDIMENSIONAL ARRAYS</span></div>
+                  <div class="sd">Loops, data tables, and advanced traversal</div>
+               </div>
+            </div>
+            <div class="lab">
+               <div class="editor-panel">
+                  <div class="ep-top">
+                     <div class="ep-file">multi_deep.php</div>
+                     <div class="ep-btns"><button class="btn-run" onclick="runCode('ta-deep','out-deep','ol-deep')">▶
+                           Run</button><button class="btn-next"
+                           onclick="nextEx('deep',['ta-deep'],['out-deep','ol-deep'])">🔄 Next Example</button></div>
+                  </div>
+                  <div class="ex-title" id="et-deep">Example 1: Employee Table</div><textarea class="code-ta"
+                     id="ta-deep" spellcheck="false"></textarea>
+               </div>
+               <div class="op">
+                  <div class="op-top">
+                     <div class="op-label" id="ol-deep">Output</div>
+                  </div>
+                  <div class="op-content wait" id="out-deep">▶ Click "Run" to execute PHP...</div>
+               </div>
+            </div>
+            <div class="explanation" id="exp-deep"></div>
+         </div>
+      </div>
+
+      <!-- SLIDE 19: QUIZ -->
+      <div class="slide" id="s19">
+         <div class="quiz-wrap">
+            <div class="quiz-hdr">
+               <div class="quiz-ttl">📝 KNOWLEDGE QUIZ</div>
+               <div class="q-prog-txt">Question <span id="qCurr">1</span> of <span id="qTotal">25</span></div>
+               <div class="q-prog-bar">
+                  <div class="q-prog-fill" id="qProgFill" style="width:4%"></div>
+               </div>
+            </div>
+            <div id="quizArea"></div>
+            <div class="results" id="quizResults">
+               <div class="res-emoji" id="resEmoji">🎉</div>
+               <div class="res-score" id="resScore">0/25</div>
+               <div class="res-label" id="resLabel">Quiz Complete!</div>
+               <div class="res-grid">
+                  <div class="res-stat">
+                     <div class="rs-n" id="rs-correct" style="color:var(--green)">0</div>
+                     <div class="rs-l">Correct</div>
+                  </div>
+                  <div class="res-stat">
+                     <div class="rs-n" id="rs-wrong" style="color:var(--red)">0</div>
+                     <div class="rs-l">Wrong</div>
+                  </div>
+                  <div class="res-stat">
+                     <div class="rs-n" id="rs-pct" style="color:var(--accent3)">0%</div>
+                     <div class="rs-l">Score</div>
+                  </div>
+               </div>
+               <button class="nav-btn primary" onclick="restartQuiz()" style="margin:0 auto">🔄 Retake Quiz</button>
+            </div>
+         </div>
+      </div>
+
+      <!-- SLIDE 20: COMPLETE -->
+      <div class="slide" id="s20">
+         <div class="complete">
+            <div class="comp-emoji">🏆</div>
+            <div class="comp-title">COURSE COMPLETE!</div>
+            <div class="comp-sub">You've mastered PHP Modules 7 & 8 — Arrays & String Functions (with extra projects)
+            </div>
+            <div class="comp-pills">
+               <span class="pill">✓ Indexed Arrays</span><span class="pill">✓ Associative Arrays</span>
+               <span class="pill">✓ Multidimensional Arrays</span><span class="pill">✓ Array Functions</span>
+               <span class="pill">✓ strlen()</span><span class="pill">✓ strpos()</span>
+               <span class="pill">✓ substr()</span><span class="pill">✓ str_replace()</span>
+               <span class="pill">✓ explode()</span><span class="pill">✓ implode()</span>
+               <span class="pill">✓ OOP with Arrays</span><span class="pill">✓ OOP with Strings</span>
+            </div>
+            <button class="nav-btn" onclick="goTo(0)">← Back to Start</button>
+         </div>
+      </div>
+
+   </div><!-- end viewport -->
+
+   <div class="footer">
+      <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>← Previous</button>
+      <div class="dots" id="dotsContainer"></div>
+      <button class="nav-btn primary" id="nextBtn" onclick="navigate(1)">Next →</button>
+   </div>
+
+   <script src="script.js"></script>
+</body>
+
+</html>
