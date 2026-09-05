@@ -1,0 +1,26 @@
+# Environment & secrets
+.env
+.env.*
+!.env.example
+*.local
+
+# PHP dependencies
+/composer.phar
+/vendor/
+
+# Node dependencies
+/node_modules/
+
+# Logs & temp
+*.log
+*.tmp
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
